@@ -12,21 +12,14 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
-public class PlayingCommand implements Command {
+public class PlayingCommand extends Command {
 
-    private final CommandHandler commandHandler;
     private final VoiceHandler voiceHandler;
 
     public PlayingCommand(CommandHandler commandHandler, VoiceHandler voiceHandler) {
-        this.commandHandler = commandHandler;
+        super(commandHandler);
         this.voiceHandler = voiceHandler;
     }
-
-    @AfterCreate
-    public void afterCreation() {
-        commandHandler.registerCommand(this);
-    }
-
 
     @Override
     public List<String> getTriggers() {
@@ -35,12 +28,12 @@ public class PlayingCommand implements Command {
 
     @Override
     public void handle(MessageReceivedEvent messageReceivedEvent) {
-        messageReceivedEvent.getMessage().delete().queue();
+        deleteMessageIfPossible(messageReceivedEvent.getMessage());
         AudioTrack track = voiceHandler.getCurrentTrack();
         if(track == null) {
-            messageReceivedEvent.getChannel().sendMessage(String.format("%s, volgensmij zie je ze vliegen want ik speel niks af hoor... :confused:", messageReceivedEvent.getAuthor().getAsMention())).queue();
+            reply(messageReceivedEvent.getMessage(), String.format("%s, volgensmij zie je ze vliegen want ik speel niks af hoor... :confused:", messageReceivedEvent.getAuthor().getAsMention()));
         } else {
-            messageReceivedEvent.getChannel().sendMessage(String.format("%s, als ik mij niet vergis is dit... deze! :musical_score: \n%s", messageReceivedEvent.getAuthor().getAsMention(), track.getInfo().uri)).queue();
+            reply(messageReceivedEvent.getMessage(), String.format("%s, als ik mij niet vergis is dit... deze! :musical_score: \n%s", messageReceivedEvent.getAuthor().getAsMention(), track.getInfo().uri));
         }
     }
 }

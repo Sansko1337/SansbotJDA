@@ -11,21 +11,14 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
-public class PauseTrackCommand implements Command {
+public class PauseTrackCommand extends Command {
 
-    private final CommandHandler commandHandler;
     private final VoiceHandler voiceHandler;
 
     public PauseTrackCommand(CommandHandler commandHandler, VoiceHandler voiceHandler) {
-        this.commandHandler = commandHandler;
+        super(commandHandler);
         this.voiceHandler = voiceHandler;
     }
-
-    @AfterCreate
-    public void afterCreation() {
-        commandHandler.registerCommand(this);
-    }
-
 
     @Override
     public List<String> getTriggers() {
@@ -34,11 +27,11 @@ public class PauseTrackCommand implements Command {
 
     @Override
     public void handle(MessageReceivedEvent messageReceivedEvent) {
-        messageReceivedEvent.getMessage().delete().queue();
-        if(voiceHandler.pasue()) {
-            messageReceivedEvent.getChannel().sendMessage(String.format("Stop de plaat! %s heeft iets belangrijks te melden!", messageReceivedEvent.getAuthor().getAsMention())).queue();
+        deleteMessageIfPossible(messageReceivedEvent.getMessage());
+        if(voiceHandler.pause()) {
+            reply(messageReceivedEvent.getMessage(), String.format("Stop de plaat! %s heeft iets belangrijks te melden!", messageReceivedEvent.getAuthor().getAsMention()));
         } else {
-            messageReceivedEvent.getChannel().sendMessage(String.format("Er valt helemaal niks te pauzeren, %s!", messageReceivedEvent.getAuthor().getAsMention())).queue();
+            reply(messageReceivedEvent.getMessage(), String.format("Er valt helemaal niks te pauzeren, %s!", messageReceivedEvent.getAuthor().getAsMention()));
         }
     }
 }

@@ -8,6 +8,7 @@ import nl.imine.vaccine.annotation.AfterCreate;
 import nl.imine.vaccine.annotation.Component;
 import nl.imine.vaccine.annotation.Property;
 import nl.imine.vaccine.annotation.Provided;
+import ooo.sansk.sansbot.options.PersistentProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,6 +81,32 @@ public class SansbotJDA {
             System.exit(1);
             return null;
         }
+    }
+
+    @Provided
+    public PersistentProperties applicationOptions() {
+        Path persistentPropertiesPath = Paths.get("persistent.properties");
+        PersistentProperties persistentProperties = new PersistentProperties(persistentPropertiesPath);
+        if(!persistentPropertiesPath.toFile().exists()) {
+            try {
+                Files.createFile(persistentPropertiesPath);
+            } catch (IOException e) {
+                logger.error("Could not create persistent property storage at {}, continue loading without options ({}: {})",
+                        persistentPropertiesPath.toString(),
+                        e.getClass().getSimpleName(),
+                        e.getMessage());
+            }
+        } else {
+            try (InputStream inputStream = Files.newInputStream(persistentPropertiesPath)){
+                persistentProperties.load(inputStream);
+            } catch (IOException e) {
+                logger.error("Could not read persistent property storage at {}, continue loading without options ({}: {})",
+                        persistentPropertiesPath.toString(),
+                        e.getClass().getSimpleName(),
+                        e.getMessage());
+            }
+        }
+        return persistentProperties;
     }
 
     private static void listenForStopCommand() {

@@ -13,21 +13,14 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
-public class SkipTrackCommand implements Command {
+public class SkipTrackCommand extends Command {
 
-    private final CommandHandler commandHandler;
     private final VoiceHandler voiceHandler;
 
     public SkipTrackCommand(CommandHandler commandHandler, VoiceHandler voiceHandler) {
-        this.commandHandler = commandHandler;
+        super(commandHandler);
         this.voiceHandler = voiceHandler;
     }
-
-    @AfterCreate
-    public void afterCreation() {
-        commandHandler.registerCommand(this);
-    }
-
 
     @Override
     public List<String> getTriggers() {
@@ -36,8 +29,8 @@ public class SkipTrackCommand implements Command {
 
     @Override
     public void handle(MessageReceivedEvent messageReceivedEvent) {
-        messageReceivedEvent.getMessage().delete().queue();
-        messageReceivedEvent.getChannel().sendMessage(String.format("Ik kon hier wel van genieten, %s alleen niet. ¯\\_(ツ)_/¯ Ander plaatje dan maar?", messageReceivedEvent.getAuthor().getAsMention())).queue();
+        deleteMessageIfPossible(messageReceivedEvent.getMessage());
+        reply(messageReceivedEvent.getMessage(), String.format("Ik kon hier wel van genieten, %s alleen niet. ¯\\_(ツ)_/¯ Ander plaatje dan maar?", messageReceivedEvent.getAuthor().getAsMention()));
         voiceHandler.skip();
     }
 }

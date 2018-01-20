@@ -98,7 +98,7 @@ public class VoiceHandler implements AudioEventListener {
         audioPlayer.stopTrack();
     }
 
-    public boolean pasue() {
+    public boolean pause() {
         if(audioPlayer.getPlayingTrack() != null) {
             audioPlayer.setPaused(true);
             return true;

@@ -2,6 +2,7 @@ package ooo.sansk.sansbot.voice.commands;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import nl.imine.vaccine.annotation.AfterCreate;
 import nl.imine.vaccine.annotation.Component;
@@ -15,21 +16,14 @@ import java.util.Date;
 import java.util.List;
 
 @Component
-public class PlayListCommand implements Command {
+public class PlayListCommand extends Command {
 
-    private final CommandHandler commandHandler;
     private final VoiceHandler voiceHandler;
 
     public PlayListCommand(CommandHandler commandHandler, VoiceHandler voiceHandler) {
-        this.commandHandler = commandHandler;
+        super(commandHandler);
         this.voiceHandler = voiceHandler;
     }
-
-    @AfterCreate
-    public void afterCreation() {
-        commandHandler.registerCommand(this);
-    }
-
 
     @Override
     public List<String> getTriggers() {
@@ -38,16 +32,16 @@ public class PlayListCommand implements Command {
 
     @Override
     public void handle(MessageReceivedEvent messageReceivedEvent) {
-        messageReceivedEvent.getMessage().delete().queue();
+        deleteMessageIfPossible(messageReceivedEvent.getMessage());
         if(!voiceHandler.getQueue().isEmpty()) {
             EmbedBuilder embedBuilder = new EmbedBuilder().setTitle(":cd: Playlist");
             voiceHandler.getQueue().stream()
                     .limit(25)
                     .map(AudioTrack::getInfo)
                     .forEach(track -> embedBuilder.addField(track.title + " | " + track.length, track.author + " (" + track.uri + ")", false));
-            messageReceivedEvent.getChannel().sendMessage(String.format("Hier %s, dit zijn nummers die er nog aan zullen komen!", messageReceivedEvent.getAuthor().getAsMention())).embed(embedBuilder.build()).queue();
+            reply(messageReceivedEvent.getMessage(), new MessageBuilder(String.format("Hier %s, dit zijn nummers die er nog aan zullen komen!", messageReceivedEvent.getAuthor().getAsMention())).setEmbed(embedBuilder.build()).build());
         } else {
-            messageReceivedEvent.getChannel().sendMessage(String.format("Sorry %s, maar er staat nog niks op de lijst. Misschien kan je zelf wat toevoegen!", messageReceivedEvent.getAuthor().getAsMention())).queue();
+            reply(messageReceivedEvent.getMessage(), String.format("Sorry %s, maar er staat nog niks op de lijst. Misschien kan je zelf wat toevoegen!", messageReceivedEvent.getAuthor().getAsMention()));
         }
     }
 

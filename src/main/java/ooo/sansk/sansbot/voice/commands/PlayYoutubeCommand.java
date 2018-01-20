@@ -11,21 +11,14 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
-public class PlayYoutubeCommand implements Command {
+public class PlayYoutubeCommand extends Command {
 
-    private final CommandHandler commandHandler;
     private final VoiceHandler voiceHandler;
 
     public PlayYoutubeCommand(CommandHandler commandHandler, VoiceHandler voiceHandler) {
-        this.commandHandler = commandHandler;
+        super(commandHandler);
         this.voiceHandler = voiceHandler;
     }
-
-    @AfterCreate
-    public void afterCreation() {
-        commandHandler.registerCommand(this);
-    }
-
 
     @Override
     public List<String> getTriggers() {
@@ -34,22 +27,22 @@ public class PlayYoutubeCommand implements Command {
 
     @Override
     public void handle(MessageReceivedEvent messageReceivedEvent) {
-        messageReceivedEvent.getMessage().delete().queue();
+        deleteMessageIfPossible(messageReceivedEvent.getMessage());
         String[] commandContent = messageReceivedEvent.getMessage().getContentRaw().split(" ");
         if(commandContent.length < 2) {
-            messageReceivedEvent.getChannel().sendMessage("Ik kan niet dingen op de playlist zetten als je me niet zegt wat hè?! :shrug:").queue();
+            reply(messageReceivedEvent.getMessage(), String.format("Zeg %s Ik kan niet dingen op de playlist zetten als je me niet zegt wat hè?! :shrug:", messageReceivedEvent.getAuthor().getAsMention()));
             return;
         }
         if(commandContent.length > 2) {
-            messageReceivedEvent.getChannel().sendMessage("Ho hè! Één ding tegelijk alsjeblieft zeg... :frowning2:").queue();
+            reply(messageReceivedEvent.getMessage(), String.format("Ho hè, %s! Één ding tegelijk alsjeblieft zeg... :frowning2:", messageReceivedEvent.getAuthor().getAsMention()));
             return;
         }
         String url = commandContent[1];
         if(!url.matches(".*")) {
-            messageReceivedEvent.getChannel().sendMessage("Maarree, dit is niet een linkje waar ik iets mee kan hè? :rolling_eyes:").queue();
+            reply(messageReceivedEvent.getMessage(), String.format("Maarree %s, dit is niet een linkje waar ik iets mee kan hè? :rolling_eyes:", messageReceivedEvent.getAuthor().getAsMention()));
             return;
         }
-        messageReceivedEvent.getChannel().sendMessage(String.format(":notes: Onze grote DJ %s heeft het volgende plaatje aangevraagd! :notes:\n%s", messageReceivedEvent.getAuthor().getAsMention(), url)).queue();
+        reply(messageReceivedEvent.getMessage(), String.format(":notes: Onze grote DJ %s heeft het volgende plaatje aangevraagd! :notes:\n%s", messageReceivedEvent.getAuthor().getAsMention(), url));
         voiceHandler.queue(url);
     }
 }

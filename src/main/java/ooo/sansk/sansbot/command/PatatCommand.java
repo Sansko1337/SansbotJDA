@@ -8,22 +8,15 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
-public class PatatCommand implements Command {
-
-    private final CommandHandler commandHandler;
+public class PatatCommand extends Command {
 
     public PatatCommand(CommandHandler commandHandler) {
-        this.commandHandler = commandHandler;
-    }
-
-    @AfterCreate
-    public void afterCreation(){
-        commandHandler.registerCommand(this);
+        super(commandHandler);
     }
 
     @Override
     public List<String> getTriggers() {
-        return Arrays.asList("WeVliegenErIn");
+        return Arrays.asList("WeVliegenErIn", "FriedaKroket");
     }
 
     @Override
