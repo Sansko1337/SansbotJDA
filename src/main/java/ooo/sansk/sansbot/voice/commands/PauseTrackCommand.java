@@ -30,12 +30,12 @@ public class PauseTrackCommand extends AbstractMusicCommand {
         deleteMessageIfPossible(messageReceivedEvent.getMessage());
         if(isInSameChannel(messageReceivedEvent.getMember(), messageReceivedEvent.getGuild())) {
             if (voiceHandler.pause()) {
-                reply(messageReceivedEvent.getTextChannel(), String.format("Stop de plaat! %s heeft iets belangrijks te melden!", messageReceivedEvent.getAuthor().getAsMention()));
+                reply(messageReceivedEvent.getChannel(), String.format("Stop de plaat! %s heeft iets belangrijks te melden!", messageReceivedEvent.getAuthor().getAsMention()));
             } else {
-                reply(messageReceivedEvent.getTextChannel(), String.format("Er valt helemaal niks te pauzeren, %s!", messageReceivedEvent.getAuthor().getAsMention()));
+                reply(messageReceivedEvent.getChannel(), String.format("Er valt helemaal niks te pauzeren, %s!", messageReceivedEvent.getAuthor().getAsMention()));
             }
         } else {
-            reply(messageReceivedEvent.getTextChannel(), String.format("Zeg %s, we gaan niet de lol van andere verzieken als je er toch geen last van hebt... :angry:", messageReceivedEvent.getAuthor().getAsMention()));
+            reply(messageReceivedEvent.getChannel(), String.format("Zeg %s, we gaan niet de lol van andere verzieken als je er toch geen last van hebt... :angry:", messageReceivedEvent.getAuthor().getAsMention()));
         }
     }
 }

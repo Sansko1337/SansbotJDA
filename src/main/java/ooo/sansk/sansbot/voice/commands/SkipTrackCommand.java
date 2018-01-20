@@ -30,7 +30,7 @@ public class SkipTrackCommand extends AbstractMusicCommand {
             commandHandler.getDefaultOutputChannel().sendMessage(String.format("Ik kon hier wel van genieten, %s alleen niet. ¯\\_(ツ)_/¯ Ander plaatje dan maar?", messageReceivedEvent.getAuthor().getAsMention())).queue();
             voiceHandler.skip();
         } else {
-            reply(messageReceivedEvent.getTextChannel(), String.format("Well %s, jij hebt hier toch geen last van. Laat ze lekker luisteren wat ze willen als je het toch niet kan horen... :rolling_eyes:", messageReceivedEvent.getAuthor().getAsMention()));
+            reply(messageReceivedEvent.getChannel(), String.format("Well %s, jij hebt hier toch geen last van. Laat ze lekker luisteren wat ze willen als je het toch niet kan horen... :rolling_eyes:", messageReceivedEvent.getAuthor().getAsMention()));
         }
     }
 }

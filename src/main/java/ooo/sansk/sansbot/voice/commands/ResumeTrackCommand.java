@@ -32,10 +32,10 @@ public class ResumeTrackCommand extends AbstractMusicCommand {
             if (voiceHandler.resume()) {
                 commandHandler.getDefaultOutputChannel().sendMessage(String.format("En volgens %s kan het feestje weer beginnen! :tada:", messageReceivedEvent.getAuthor().getAsMention())).queue();
             } else {
-                reply(messageReceivedEvent.getTextChannel(), String.format("Zeg %s, ik kan niks resumen als er verder niks af te spelen valt! :angry:", messageReceivedEvent.getAuthor().getAsMention()));
+                reply(messageReceivedEvent.getChannel(), String.format("Zeg %s, ik kan niks resumen als er verder niks af te spelen valt! :angry:", messageReceivedEvent.getAuthor().getAsMention()));
             }
         } else {
-            reply(messageReceivedEvent.getTextChannel(), String.format("Yo %s, ik geloof niet dat jij kan weten of men alweer zin heeft in de muziek... :confused:", messageReceivedEvent.getAuthor().getAsMention()));
+            reply(messageReceivedEvent.getChannel(), String.format("Yo %s, ik geloof niet dat jij kan weten of men alweer zin heeft in de muziek... :confused:", messageReceivedEvent.getAuthor().getAsMention()));
         }
     }
 }
