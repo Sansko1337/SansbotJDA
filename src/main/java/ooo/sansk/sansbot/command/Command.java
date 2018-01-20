@@ -2,8 +2,10 @@ package ooo.sansk.sansbot.command;
 
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.Permission;
+import net.dv8tion.jda.core.entities.Channel;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.utils.PermissionUtil;
 import nl.imine.vaccine.annotation.AfterCreate;
@@ -44,15 +46,15 @@ public abstract class Command {
         message.delete().queue();
     }
 
-    public void reply(Message original, Message reply) {
-        if(original.getChannel().getType().equals(ChannelType.PRIVATE) || original.getChannel().getType().equals(ChannelType.GROUP)) {
-            original.getChannel().sendMessage(reply).queue();
+    public void reply(TextChannel original, Message reply) {
+        if(original.getType().equals(ChannelType.PRIVATE) || original.getType().equals(ChannelType.GROUP)) {
+            original.sendMessage(reply).queue();
         } else {
             commandHandler.getDefaultOutputChannel().sendMessage(reply).queue();
         }
     }
 
-    public void reply(Message original, String reply) {
+    public void reply(TextChannel original, String reply) {
         reply(original, new MessageBuilder(reply).build());
     }
 }

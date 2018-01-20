@@ -31,9 +31,9 @@ public class PlayingCommand extends Command {
         deleteMessageIfPossible(messageReceivedEvent.getMessage());
         AudioTrack track = voiceHandler.getCurrentTrack();
         if(track == null) {
-            reply(messageReceivedEvent.getMessage(), String.format("%s, volgensmij zie je ze vliegen want ik speel niks af hoor... :confused:", messageReceivedEvent.getAuthor().getAsMention()));
+            reply(messageReceivedEvent.getTextChannel(), String.format("%s, volgensmij zie je ze vliegen want ik speel niks af hoor... :confused:", messageReceivedEvent.getAuthor().getAsMention()));
         } else {
-            reply(messageReceivedEvent.getMessage(), String.format("%s, als ik mij niet vergis is dit... deze! :musical_score: \n%s", messageReceivedEvent.getAuthor().getAsMention(), track.getInfo().uri));
+            reply(messageReceivedEvent.getTextChannel(), String.format("%s, als ik mij niet vergis is dit... deze! :musical_score: \n%s", messageReceivedEvent.getAuthor().getAsMention(), track.getInfo().uri));
         }
     }
 }

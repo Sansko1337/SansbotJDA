@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
-public class ResumeTrackCommand extends Command {
+public class ResumeTrackCommand extends AbstractMusicCommand {
 
     private final VoiceHandler voiceHandler;
 
@@ -28,10 +28,14 @@ public class ResumeTrackCommand extends Command {
     @Override
     public void handle(MessageReceivedEvent messageReceivedEvent) {
         deleteMessageIfPossible(messageReceivedEvent.getMessage());
-        if(voiceHandler.resume()) {
-            reply(messageReceivedEvent.getMessage(), String.format("En volgens %s kan het feestje weer beginnen! :tada:", messageReceivedEvent.getAuthor().getAsMention()));
+        if(isInSameChannel(messageReceivedEvent.getMember(), messageReceivedEvent.getGuild())) {
+            if (voiceHandler.resume()) {
+                commandHandler.getDefaultOutputChannel().sendMessage(String.format("En volgens %s kan het feestje weer beginnen! :tada:", messageReceivedEvent.getAuthor().getAsMention())).queue();
+            } else {
+                reply(messageReceivedEvent.getTextChannel(), String.format("Zeg %s, ik kan niks resumen als er verder niks af te spelen valt! :angry:", messageReceivedEvent.getAuthor().getAsMention()));
+            }
         } else {
-            reply(messageReceivedEvent.getMessage(), String.format("Zeg %s, ik kan niks resumen als er verder niks af te spelen valt! :angry:", messageReceivedEvent.getAuthor().getAsMention()));
+            reply(messageReceivedEvent.getTextChannel(), String.format("Yo %s, ik geloof niet dat jij kan weten of men alweer zin heeft in de muziek... :confused:", messageReceivedEvent.getAuthor().getAsMention()));
         }
     }
 }

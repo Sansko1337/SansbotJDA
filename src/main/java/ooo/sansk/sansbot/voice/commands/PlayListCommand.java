@@ -39,9 +39,9 @@ public class PlayListCommand extends Command {
                     .limit(25)
                     .map(AudioTrack::getInfo)
                     .forEach(track -> embedBuilder.addField(track.title + " | " + track.length, track.author + " (" + track.uri + ")", false));
-            reply(messageReceivedEvent.getMessage(), new MessageBuilder(String.format("Hier %s, dit zijn nummers die er nog aan zullen komen!", messageReceivedEvent.getAuthor().getAsMention())).setEmbed(embedBuilder.build()).build());
+            reply(messageReceivedEvent.getTextChannel(), new MessageBuilder(String.format("Hier %s, dit zijn nummers die er nog aan zullen komen!", messageReceivedEvent.getAuthor().getAsMention())).setEmbed(embedBuilder.build()).build());
         } else {
-            reply(messageReceivedEvent.getMessage(), String.format("Sorry %s, maar er staat nog niks op de lijst. Misschien kan je zelf wat toevoegen!", messageReceivedEvent.getAuthor().getAsMention()));
+            reply(messageReceivedEvent.getTextChannel(), String.format("Sorry %s, maar er staat nog niks op de lijst. Misschien kan je zelf wat toevoegen!", messageReceivedEvent.getAuthor().getAsMention()));
         }
     }
 
