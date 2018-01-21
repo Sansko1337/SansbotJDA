@@ -1,4 +1,4 @@
-package ooo.sansk.sansbot.voice.commands;
+package ooo.sansk.sansbot.music.commands;
 
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;

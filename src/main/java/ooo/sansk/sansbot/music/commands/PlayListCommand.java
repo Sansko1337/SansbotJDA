@@ -1,14 +1,13 @@
-package ooo.sansk.sansbot.voice.commands;
+package ooo.sansk.sansbot.music.commands;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import nl.imine.vaccine.annotation.AfterCreate;
 import nl.imine.vaccine.annotation.Component;
 import ooo.sansk.sansbot.command.Command;
 import ooo.sansk.sansbot.command.CommandHandler;
-import ooo.sansk.sansbot.voice.VoiceHandler;
+import ooo.sansk.sansbot.music.VoiceHandler;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
