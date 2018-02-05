@@ -1,0 +1,60 @@
+Language model created by QuickLM on Fri Feb  2 11:43:25 EST 2018
+Copyright (c) 1996-2010 Carnegie Mellon University and Alexander I. Rudnicky
+
+The model is in standard ARPA format, designed by Doug Paul while he was at MITRE.
+
+The code that was used to produce this language model is available in Open Source.
+Please visit http://www.speech.cs.cmu.edu/tools/ for more information
+
+The (fixed) discount mass is 0.5. The backoffs are computed using the ratio method.
+This model based on a corpus of 8 sentences and 16 words
+
+\data\
+ngram 1=10
+ngram 2=14
+ngram 3=13
+
+\1-grams:
+-1.0212 </s> -0.3010
+-1.0212 <s> -0.2576
+-1.9243 BAKKES -0.2576
+-1.0792 SANSBOT -0.2632
+-1.9243 SKIP -0.2576
+-1.9243 START -0.2576
+-1.9243 STIL -0.2576
+-1.9243 STOP -0.2576
+-1.9243 VOLGENDE -0.2576
+-1.0792 YO -0.2632
+
+\2-grams:
+-0.3590 <s> YO 0.0000
+-0.3010 BAKKES </s> -0.3010
+-1.1461 SANSBOT BAKKES 0.0000
+-1.1461 SANSBOT SKIP 0.0000
+-1.1461 SANSBOT START 0.0000
+-1.1461 SANSBOT STIL 0.0000
+-1.1461 SANSBOT STOP 0.0000
+-1.1461 SANSBOT VOLGENDE 0.0000
+-0.3010 SKIP </s> -0.3010
+-0.3010 START </s> -0.3010
+-0.3010 STIL </s> -0.3010
+-0.3010 STOP </s> -0.3010
+-0.3010 VOLGENDE </s> -0.3010
+-0.3010 YO SANSBOT -0.0000
+
+\3-grams:
+-0.3010 <s> YO SANSBOT
+-0.3010 SANSBOT BAKKES </s>
+-0.3010 SANSBOT SKIP </s>
+-0.3010 SANSBOT START </s>
+-0.3010 SANSBOT STIL </s>
+-0.3010 SANSBOT STOP </s>
+-0.3010 SANSBOT VOLGENDE </s>
+-1.1461 YO SANSBOT BAKKES
+-1.1461 YO SANSBOT SKIP
+-1.1461 YO SANSBOT START
+-1.1461 YO SANSBOT STIL
+-1.1461 YO SANSBOT STOP
+-1.1461 YO SANSBOT VOLGENDE
+
+\end\

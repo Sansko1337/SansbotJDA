@@ -42,6 +42,7 @@ dependency-reduced-pom.xml
 
 # Project specific files
 application.properties
+persistent.properties
 
 #Don't ignore source files
 !src/*

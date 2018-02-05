@@ -51,6 +51,10 @@ public class VoiceHandler implements AudioEventListener {
         }
         audioPlayer = audioPlayerManager.createPlayer();
         audioPlayer.addListener(this);
+//        setSendingHandler(guild);
+    }
+
+    public void setSendingHandler(Guild guild) {
         guild.getAudioManager().setSendingHandler(new AudioPlayerSendHandler(audioPlayer));
     }
 
