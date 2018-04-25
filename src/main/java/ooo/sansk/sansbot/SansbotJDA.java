@@ -46,6 +46,7 @@ public class SansbotJDA {
             logger.error("Unable to load properties. Exiting. ({}: {})", e.getClass().getSimpleName(), e.getMessage());
             System.exit(1);
         }
+
         Vaccine vaccine = new Vaccine();
         vaccine.inject(mergedProperties, "ooo.sansk.sansbot");
 

@@ -210,8 +210,11 @@ public class Vaccine {
         dependencies = scanClassesForCandidates(classes);
 
         dependencies.forEach(dependency -> {
+
             if (dependencies.stream().noneMatch(candidate -> candidate.getClass().equals(dependency.getType()))) {
+                long resolveDependencyStartTimeMillis = System.currentTimeMillis();
                 resolveDependency(dependency);
+                logger.error("Resolving dependency " + dependency.getType().getName() + " took " + String.format("%,3d", (System.currentTimeMillis() - resolveDependencyStartTimeMillis)) +"ms");
             }
         });
 
@@ -315,13 +318,19 @@ public class Vaccine {
     }
 
     private Object searchAndCreateProviderInstance(Object providerInstance, Class requestedType) {
-        return Arrays.stream(providerInstance.getClass().getMethods())
+        Optional<Object> instance = candidates.stream()
+                .filter(requestedType::isInstance)
+                .findFirst();
+
+        return instance.orElseGet(() -> Arrays.stream(providerInstance.getClass().getMethods())
                 .filter(method -> method.getParameterCount() == 0)
                 .filter(method -> method.isAnnotationPresent(Provided.class))
                 .filter(method -> method.getReturnType().equals(requestedType))
                 .map(method -> {
                     try {
-                        return method.invoke(providerInstance);
+                        Object providedObject = method.invoke(providerInstance);
+                        candidates.add(providedObject);
+                        return providedObject;
                     } catch (IllegalAccessException | InvocationTargetException e) {
                         logger.error("Could not provide Instance for {}. Reason: ({}: {})",
                                 requestedType.getClass().getName(),
@@ -330,7 +339,7 @@ public class Vaccine {
                     }
                     return null;
                 })
-                .findFirst().orElse(null);
+                .findFirst().orElse(null));
     }
 
     private String resolvePropertyDependency(Parameter parameter) {
@@ -359,19 +368,6 @@ public class Vaccine {
                 if (providerClass.equals(type)) {
                     return dependency.getType();
                 }
-            }
-        }
-        return null;
-    }
-
-    public Object getCandidates() {
-        return candidates;
-    }
-
-    public Object getInjected(Class type) {
-        for (Object candidate : candidates) {
-            if (candidate.getClass().equals(type)) {
-                return candidate;
             }
         }
         return null;
