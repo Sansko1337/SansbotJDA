@@ -93,7 +93,7 @@ public class SansbotJDA {
                 Files.createFile(persistentPropertiesPath);
             } catch (IOException e) {
                 logger.error("Could not create persistent property storage at {}, continue loading without options ({}: {})",
-                        persistentPropertiesPath.toString(),
+                        persistentPropertiesPath,
                         e.getClass().getSimpleName(),
                         e.getMessage());
             }
@@ -102,7 +102,7 @@ public class SansbotJDA {
                 persistentProperties.load(inputStream);
             } catch (IOException e) {
                 logger.error("Could not read persistent property storage at {}, continue loading without options ({}: {})",
-                        persistentPropertiesPath.toString(),
+                        persistentPropertiesPath,
                         e.getClass().getSimpleName(),
                         e.getMessage());
             }
