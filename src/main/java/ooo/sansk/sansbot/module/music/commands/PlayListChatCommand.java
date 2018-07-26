@@ -1,4 +1,4 @@
-package ooo.sansk.sansbot.music.commands;
+package ooo.sansk.sansbot.module.music.commands;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -7,7 +7,7 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import nl.imine.vaccine.annotation.Component;
 import ooo.sansk.sansbot.command.ChatCommand;
 import ooo.sansk.sansbot.command.ChatCommandHandler;
-import ooo.sansk.sansbot.music.VoiceHandler;
+import ooo.sansk.sansbot.module.music.TrackListManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -17,11 +17,11 @@ import java.util.List;
 @Component
 public class PlayListChatCommand extends ChatCommand {
 
-    private final VoiceHandler voiceHandler;
+    private final TrackListManager trackListManager;
 
-    public PlayListChatCommand(ChatCommandHandler chatCommandHandler, VoiceHandler voiceHandler) {
+    public PlayListChatCommand(ChatCommandHandler chatCommandHandler, TrackListManager trackListManager) {
         super(chatCommandHandler);
-        this.voiceHandler = voiceHandler;
+        this.trackListManager = trackListManager;
     }
 
     @Override
@@ -32,9 +32,9 @@ public class PlayListChatCommand extends ChatCommand {
     @Override
     public void handle(MessageReceivedEvent messageReceivedEvent) {
         deleteMessageIfPossible(messageReceivedEvent.getMessage());
-        if(!voiceHandler.getQueue().isEmpty()) {
-            EmbedBuilder embedBuilder = new EmbedBuilder().setTitle(":cd: Playlist");
-            voiceHandler.getQueue().stream()
+        if(!trackListManager.getQueue().isEmpty()) {
+            EmbedBuilder embedBuilder = new EmbedBuilder().setTitle(":cd: PlayList");
+            trackListManager.getQueue().stream()
                     .limit(25)
                     .map(AudioTrack::getInfo)
                     .forEach(track -> embedBuilder.addField(track.title + " | " + track.length, track.author + " (" + track.uri + ")", false));

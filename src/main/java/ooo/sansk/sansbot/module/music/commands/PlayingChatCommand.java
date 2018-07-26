@@ -1,11 +1,11 @@
-package ooo.sansk.sansbot.music.commands;
+package ooo.sansk.sansbot.module.music.commands;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import nl.imine.vaccine.annotation.Component;
 import ooo.sansk.sansbot.command.ChatCommand;
 import ooo.sansk.sansbot.command.ChatCommandHandler;
-import ooo.sansk.sansbot.music.VoiceHandler;
+import ooo.sansk.sansbot.module.music.TrackListManager;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,11 +13,11 @@ import java.util.List;
 @Component
 public class PlayingChatCommand extends ChatCommand {
 
-    private final VoiceHandler voiceHandler;
+    private final TrackListManager trackListManager;
 
-    public PlayingChatCommand(ChatCommandHandler chatCommandHandler, VoiceHandler voiceHandler) {
+    public PlayingChatCommand(ChatCommandHandler chatCommandHandler, TrackListManager trackListManager) {
         super(chatCommandHandler);
-        this.voiceHandler = voiceHandler;
+        this.trackListManager = trackListManager;
     }
 
     @Override
@@ -28,7 +28,7 @@ public class PlayingChatCommand extends ChatCommand {
     @Override
     public void handle(MessageReceivedEvent messageReceivedEvent) {
         deleteMessageIfPossible(messageReceivedEvent.getMessage());
-        AudioTrack track = voiceHandler.getCurrentTrack();
+        AudioTrack track = trackListManager.getCurrentTrack();
         if(track == null) {
             reply(messageReceivedEvent.getChannel(), String.format("%s, volgensmij zie je ze vliegen want ik speel niks af hoor... :confused:", messageReceivedEvent.getAuthor().getAsMention()));
         } else {

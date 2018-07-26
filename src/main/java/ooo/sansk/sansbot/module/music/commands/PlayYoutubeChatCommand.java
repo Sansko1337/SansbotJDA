@@ -1,9 +1,9 @@
-package ooo.sansk.sansbot.music.commands;
+package ooo.sansk.sansbot.module.music.commands;
 
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import nl.imine.vaccine.annotation.Component;
 import ooo.sansk.sansbot.command.ChatCommandHandler;
-import ooo.sansk.sansbot.music.VoiceHandler;
+import ooo.sansk.sansbot.module.music.TrackListManager;
 
 import java.util.Arrays;
 import java.util.List;
@@ -11,11 +11,11 @@ import java.util.List;
 @Component
 public class PlayYoutubeChatCommand extends AbstractMusicChatCommand {
 
-    private final VoiceHandler voiceHandler;
+    private final TrackListManager trackListManager;
 
-    public PlayYoutubeChatCommand(ChatCommandHandler chatCommandHandler, VoiceHandler voiceHandler) {
+    public PlayYoutubeChatCommand(ChatCommandHandler chatCommandHandler, TrackListManager trackListManager) {
         super(chatCommandHandler);
-        this.voiceHandler = voiceHandler;
+        this.trackListManager = trackListManager;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class PlayYoutubeChatCommand extends AbstractMusicChatCommand {
                 return;
             }
             chatCommandHandler.getDefaultOutputChannel().sendMessage(String.format(":notes: Onze grote DJ %s heeft het volgende plaatje aangevraagd! :notes:\n%s", messageReceivedEvent.getAuthor().getAsMention(), url)).queue();
-            voiceHandler.queue(url);
+            trackListManager.loadTrack(url);
         } else {
             reply(messageReceivedEvent.getChannel(), String.format("Ik ga geen dingen voor je opzetten als je er toch niet zelf naar gaat luisteren, %s... :expressionless:", messageReceivedEvent.getAuthor().getAsMention()));
         }

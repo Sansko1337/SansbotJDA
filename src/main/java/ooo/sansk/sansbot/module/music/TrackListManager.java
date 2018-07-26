@@ -1,4 +1,4 @@
-package ooo.sansk.sansbot.music;
+package ooo.sansk.sansbot.module.music;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
@@ -16,35 +16,44 @@ import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import nl.imine.vaccine.annotation.AfterCreate;
 import nl.imine.vaccine.annotation.Component;
+import ooo.sansk.sansbot.module.music.playlist.PlayList;
+import ooo.sansk.sansbot.module.music.playlist.Track;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 @Component
-public class VoiceHandler implements AudioEventListener {
+public class TrackListManager implements AudioEventListener {
 
-    private static final Logger logger = LoggerFactory.getLogger(VoiceHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(TrackListManager.class);
 
     private final JDA jda;
+    private final PlayListService playListService;
     private final AudioPlayerManager audioPlayerManager;
     private final Queue<AudioTrack> queue;
+    private final List<Track> playlistQueue;
+    private final PlayMode currentPlayMode;
 
     private AudioPlayer audioPlayer;
+    private PlayList currentPlayList;
 
-    public VoiceHandler(JDA jda) {
+    public TrackListManager(JDA jda, PlayListService playListService) {
         this.jda = jda;
+        this.playListService = playListService;
         this.audioPlayerManager = new DefaultAudioPlayerManager();
         this.queue = new LinkedBlockingQueue<>();
-        AudioSourceManagers.registerLocalSource(audioPlayerManager);
-        AudioSourceManagers.registerRemoteSources(audioPlayerManager);
+        this.playlistQueue = new ArrayList<>();
+        this.currentPlayMode = PlayMode.SEQUENTIAL;
     }
 
     @AfterCreate
     public void afterCreation() {
-        logger.info("Guilds:");
-        jda.getGuilds().forEach(guild -> logger.info("{}", guild.getName()));
+        AudioSourceManagers.registerLocalSource(audioPlayerManager);
+        AudioSourceManagers.registerRemoteSources(audioPlayerManager);
         Guild guild = jda.getGuilds().get(0);
         for(VoiceChannel voiceChannel : guild.getVoiceChannels()) {
             guild.getAudioManager().openAudioConnection(voiceChannel);
@@ -58,15 +67,11 @@ public class VoiceHandler implements AudioEventListener {
         guild.getAudioManager().setSendingHandler(new AudioPlayerSendHandler(audioPlayer));
     }
 
-    public AudioPlayerManager getAudioPlayerManager() {
-        return audioPlayerManager;
-    }
-
-    public void queue(String track){
+    public void loadTrack(String track){
         audioPlayerManager.loadItem(track, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
-                queue(track);
+                queueSingleTrack(track);
             }
 
             @Override
@@ -84,12 +89,17 @@ public class VoiceHandler implements AudioEventListener {
         });
     }
 
-    private void queue(AudioTrack audioTrack) {
+    private void queueSingleTrack(AudioTrack audioTrack) {
         if(queue.isEmpty() && audioPlayer.getPlayingTrack() == null) {
             play(audioTrack);
         } else {
             queue.add(audioTrack);
         }
+    }
+
+    private void queuePlaylist(PlayList playList) {
+        playlistQueue.clear();
+        playlistQueue.addAll(playList.getTrackList());
     }
 
     public boolean play(AudioTrack track) {
@@ -135,10 +145,49 @@ public class VoiceHandler implements AudioEventListener {
     @Override
     public void onEvent(AudioEvent event) {
         if(event instanceof TrackEndEvent) {
-            AudioTrack track = queue.poll();
-            if(track != null) {
+            handleTrackEndEvent();
+        }
+    }
+
+    private void handleTrackEndEvent() {
+        if(playlistQueue.isEmpty())
+            playNextQueuedTrack();
+        else
+            playNextPlayListTrack();
+    }
+
+    private void playNextQueuedTrack() {
+        AudioTrack track = queue.poll();
+        if(track != null) {
+            play(track);
+        }
+    }
+
+    private void playNextPlayListTrack() {
+        loadAndPlayTrack(currentPlayMode.getNextTrack(playlistQueue));
+    }
+
+    private void loadAndPlayTrack(Track track) {
+        audioPlayerManager.loadItem(track.getSource(), new AudioLoadResultHandler() {
+            @Override
+            public void trackLoaded(AudioTrack track) {
                 play(track);
             }
-        }
+
+            @Override
+            public void playlistLoaded(AudioPlaylist playlist) {}
+
+            @Override
+            public void noMatches() {
+                logger.warn("Could not load track \"{}\" in playlist \"{}\"", track.getSource(), currentPlayList.getId());
+                playNextPlayListTrack();
+            }
+
+            @Override
+            public void loadFailed(FriendlyException e) {
+                logger.error("An exception occurred while loading AudioTrack ({}: {})", e.getCause().getClass().getSimpleName(), e.getMessage());
+                playNextPlayListTrack();
+            }
+        });
     }
 }

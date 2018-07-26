@@ -1,4 +1,4 @@
-package ooo.sansk.sansbot.music;
+package ooo.sansk.sansbot.module.music;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame;

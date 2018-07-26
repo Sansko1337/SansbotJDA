@@ -1,9 +1,9 @@
-package ooo.sansk.sansbot.music.commands;
+package ooo.sansk.sansbot.module.music.commands;
 
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import nl.imine.vaccine.annotation.Component;
 import ooo.sansk.sansbot.command.ChatCommandHandler;
-import ooo.sansk.sansbot.music.VoiceHandler;
+import ooo.sansk.sansbot.module.music.TrackListManager;
 
 import java.util.Arrays;
 import java.util.List;
@@ -11,11 +11,11 @@ import java.util.List;
 @Component
 public class PauseTrackChatCommand extends AbstractMusicChatCommand {
 
-    private final VoiceHandler voiceHandler;
+    private final TrackListManager trackListManager;
 
-    public PauseTrackChatCommand(ChatCommandHandler chatCommandHandler, VoiceHandler voiceHandler) {
+    public PauseTrackChatCommand(ChatCommandHandler chatCommandHandler, TrackListManager trackListManager) {
         super(chatCommandHandler);
-        this.voiceHandler = voiceHandler;
+        this.trackListManager = trackListManager;
     }
 
     @Override
@@ -27,7 +27,7 @@ public class PauseTrackChatCommand extends AbstractMusicChatCommand {
     public void handle(MessageReceivedEvent messageReceivedEvent) {
         deleteMessageIfPossible(messageReceivedEvent.getMessage());
         if(isInSameChannel(messageReceivedEvent.getMember(), messageReceivedEvent.getGuild())) {
-            if (voiceHandler.pause()) {
+            if (trackListManager.pause()) {
                 reply(messageReceivedEvent.getChannel(), String.format("Stop de plaat! %s heeft iets belangrijks te melden!", messageReceivedEvent.getAuthor().getAsMention()));
             } else {
                 reply(messageReceivedEvent.getChannel(), String.format("Er valt helemaal niks te pauzeren, %s!", messageReceivedEvent.getAuthor().getAsMention()));
