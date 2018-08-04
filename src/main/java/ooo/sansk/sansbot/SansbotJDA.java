@@ -1,5 +1,9 @@
 package ooo.sansk.sansbot;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -8,6 +12,7 @@ import nl.imine.vaccine.annotation.AfterCreate;
 import nl.imine.vaccine.annotation.Component;
 import nl.imine.vaccine.annotation.Property;
 import nl.imine.vaccine.annotation.Provided;
+import ooo.sansk.sansbot.options.AudioTrackSerializer;
 import ooo.sansk.sansbot.options.PersistentProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -108,6 +113,16 @@ public class SansbotJDA {
             }
         }
         return persistentProperties;
+    }
+
+    @Provided
+    public ObjectMapper objectMapper() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+        SimpleModule serializers = new SimpleModule();
+        serializers.addSerializer(AudioTrack.class, new AudioTrackSerializer());
+        objectMapper.registerModule(serializers);
+        return objectMapper;
     }
 
     private static void listenForStopCommand() {
