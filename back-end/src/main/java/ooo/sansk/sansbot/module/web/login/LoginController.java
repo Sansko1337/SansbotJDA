@@ -10,6 +10,8 @@ import spark.Response;
 
 import java.util.Optional;
 
+import static spark.Spark.halt;
+
 @Component
 @Mapping(location = LoginController.BASE_URL)
 public class LoginController implements Controller {
@@ -26,13 +28,11 @@ public class LoginController implements Controller {
 
     @Mapping(type = MappingType.POST)
     public String onLogin(Request request, Response response) throws Exception {
-        Optional<WebUserDetails> oWebUserDetails = loginService.attemptLogin(request.body());
-        if(oWebUserDetails.isPresent()) {
+        Optional<WebUserDetails> oWebUserDetails = loginService.attemptLogin(request, request.body());
+        if (oWebUserDetails.isPresent())
             response.body(objectMapper.writeValueAsString(oWebUserDetails.get()));
-        } else {
-            response.status(401);
-            response.body("Invalid Token");
-        }
+        else
+            halt(401, "Invalid Token");
         return response.body();
     }
 }

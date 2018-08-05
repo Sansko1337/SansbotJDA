@@ -4,6 +4,7 @@ import nl.imine.vaccine.annotation.AfterCreate;
 import nl.imine.vaccine.annotation.Component;
 import nl.imine.vaccine.annotation.Property;
 import ooo.sansk.sansbot.module.web.login.LoginController;
+import ooo.sansk.sansbot.module.web.session.SessionFilter;
 import ooo.sansk.sansbot.module.web.util.Controller;
 import ooo.sansk.sansbot.module.web.util.Mapping;
 import ooo.sansk.sansbot.module.web.util.MappingType;
@@ -24,12 +25,15 @@ public class SparkConfiguration {
     private static final Logger logger = LoggerFactory.getLogger(SparkConfiguration.class);
 
     private final int port;
+    private final SessionFilter sessionFilter;
     private final List<Controller> controllerList;
 
     public SparkConfiguration(@Property("web.port") String port,
+                              SessionFilter sessionFilter,
                               LoginController loginController,
                               SoundEffectsController soundEffectsController) {
         this.port = Integer.valueOf(port);
+        this.sessionFilter = sessionFilter;
         controllerList = new ArrayList<>();
         controllerList.add(loginController);
         controllerList.add(soundEffectsController);
@@ -39,6 +43,8 @@ public class SparkConfiguration {
     public void configureSpark() {
         Spark.staticFileLocation("/public");
         Spark.port(port);
+        Spark.before(sessionFilter);
+        Spark.before((request, response) -> response.header("Access-Control-Allow-Origin", "*"));
         Spark.exception(Exception.class, this::handleException);
         controllerList.forEach(this::registerMappings);
     }
@@ -46,7 +52,7 @@ public class SparkConfiguration {
 
     public void handleException(Exception e, Request request, Response response) {
         logger.error("Error handling request from '{}'. Caused by ({}: {})", request.session().id(), e.getClass().getSimpleName(), e.getMessage());
-        response.body("");
+        Spark.halt(500);
     }
 
     public void registerMappings(Controller controller) {

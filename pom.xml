@@ -7,17 +7,22 @@
     <groupId>ooo.sansk.sansbot</groupId>
     <artifactId>SansbotJDA</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <properties>
         <java.version>1.10</java.version>
         <maven.compiler.source>1.10</maven.compiler.source>
         <maven.compiler.target>1.10</maven.compiler.target>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <frontend.maven.plugin.version>1.6</frontend.maven.plugin.version>
+        <frontend.maven.plugin.node.version>v10.5.0</frontend.maven.plugin.node.version>
+        <frontend.maven.plugin.npm.version>6.1.0</frontend.maven.plugin.npm.version>
     </properties>
 
     <modules>
         <module>back-end</module>
+        <module>front-end</module>
     </modules>
 
     <repositories>
