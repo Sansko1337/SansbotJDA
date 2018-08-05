@@ -32,7 +32,12 @@ public class LoginController implements Controller {
         if (oWebUserDetails.isPresent())
             response.body(objectMapper.writeValueAsString(oWebUserDetails.get()));
         else
-            halt(401, "Invalid Token");
+            unauthorizeResponse(response);
         return response.body();
+    }
+
+    private void unauthorizeResponse(Response response) {
+        response.status(401);
+        response.body("Invalid Token");
     }
 }

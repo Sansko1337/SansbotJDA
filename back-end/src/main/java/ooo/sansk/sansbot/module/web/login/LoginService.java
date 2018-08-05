@@ -32,7 +32,9 @@ public class LoginService {
                 .filter(webToken -> webToken.getExpirationTime().isAfter(ZonedDateTime.now()))
                 .map(this::createUserDetails)
                 .findFirst();
-        userDetails.ifPresent(webUserDetails -> request.session().attribute(SessionFilter.SESSION_INFORMATION, createSessionInformation(request.ip())));
+        userDetails.ifPresent(webUserDetails -> {
+            request.session().attribute(SessionFilter.SESSION_INFORMATION, createSessionInformation(request.ip()));
+        });
         return userDetails;
     }
 
@@ -56,7 +58,7 @@ public class LoginService {
         return ZonedDateTime.now().plusMinutes(15);
     }
 
-    private SessionInformation createSessionInformation(String ip){
+    private SessionInformation createSessionInformation(String ip) {
         return new SessionInformation(ip, createSessionTokenExpirationTime());
     }
 

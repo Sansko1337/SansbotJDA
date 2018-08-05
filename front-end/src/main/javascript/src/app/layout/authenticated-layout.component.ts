@@ -1,12 +1,10 @@
-import {Component} from '@angular/core';
+import {Component, ViewEncapsulation} from '@angular/core';
 
 @Component({
   selector: 'app-authenticated-layout',
-  template: `
-    <h1>Title</h1>
-    <router-outlet></router-outlet>
-  `,
-  styles: []
+  templateUrl: `./authenticated-layout.component.html`,
+  styleUrls: ['authenticated-layout.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class AuthenticatedLayoutComponent {
 }

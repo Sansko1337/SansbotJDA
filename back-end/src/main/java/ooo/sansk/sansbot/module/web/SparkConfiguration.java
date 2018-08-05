@@ -65,6 +65,7 @@ public class SparkConfiguration {
     private void registerMapping(Controller controller, Method method, String controllerBaseLocation) {
         Mapping mapping = method.getAnnotation(Mapping.class);
         String mappingLocation = controllerBaseLocation + ensureStringHasLeadingSlashStripTrailingSlash(mapping.location());
+        logger.info("Registering mapping for '{}' with method {}", mappingLocation, mapping.type());
         mapping.type().registerMapping(mappingLocation, (request, response) ->
                 method.invoke(controller, request, response)
         );

@@ -10,6 +10,8 @@ import {HomeComponent} from './view/home/home.component';
 import {LoginComponent} from './view/login/login.component';
 import {LoginGuard} from './service/login.guard';
 import {LoginService} from './service/login.service';
+import {SidebarComponent} from "./component/sidebar/sidebar.component";
+import {ScheduleComponent} from "./view/schedule/schedule.component";
 
 @NgModule({
   declarations: [
@@ -17,7 +19,9 @@ import {LoginService} from './service/login.service';
     AuthenticatedLayoutComponent,
     LoginLayoutComponent,
     HomeComponent,
-    LoginComponent
+    LoginComponent,
+    SidebarComponent,
+    ScheduleComponent
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule],
   providers: [LoginService, LoginGuard],

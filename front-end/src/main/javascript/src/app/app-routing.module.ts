@@ -5,6 +5,7 @@ import {LoginLayoutComponent} from './layout/login-layout.component';
 import {HomeComponent} from './view/home/home.component';
 import {LoginComponent} from './view/login/login.component';
 import {LoginGuard} from './service/login.guard';
+import {ScheduleComponent} from "./view/schedule/schedule.component";
 
 const routes: Routes = [
   {
@@ -15,6 +16,9 @@ const routes: Routes = [
       {
         path: '',
         component: HomeComponent
+      },{
+        path: 'schedule',
+        component: ScheduleComponent
       }
     ]
   },

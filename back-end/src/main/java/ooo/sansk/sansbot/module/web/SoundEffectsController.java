@@ -31,7 +31,7 @@ public class SoundEffectsController implements Controller {
     }
 
     @Mapping(type = MappingType.POST)
-    private String postTrack(Request request, Response response) {
+    public String postTrack(Request request, Response response) {
         String url = new JSONObject(request.body()).getString("url");
         trackListManager.loadTrack(url);
         response.body("Added track " + url);

@@ -12,7 +12,7 @@ export class LoginService {
   constructor(private router: Router, private http: HttpClient) {
   }
 
-  get isLoggedIn() {
+  getUser() {
     return this.loggedIn.asObservable();
   }
 

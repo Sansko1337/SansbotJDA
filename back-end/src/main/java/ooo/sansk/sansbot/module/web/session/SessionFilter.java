@@ -20,7 +20,7 @@ public class SessionFilter implements Filter {
 
     private void validateSession(Session session, Request request, Response response) {
         Object sessionInformation = session.attribute(SESSION_INFORMATION);
-        if (isSessionValid(request, sessionInformation))
+        if (!isSessionValid(request, sessionInformation))
             invalidateSession(session);
         else
             renewSession(session);
@@ -32,7 +32,7 @@ public class SessionFilter implements Filter {
     }
 
     private boolean isSessionValid(Request request, Object sessionInformation) {
-        return !(sessionInformation instanceof SessionInformation) || !isSessionNotExpiredAndSameIp((SessionInformation) sessionInformation, request.ip());
+        return (sessionInformation instanceof SessionInformation) && isSessionNotExpiredAndSameIp((SessionInformation) sessionInformation, request.ip());
     }
 
     private boolean isSessionNotExpiredAndSameIp(SessionInformation sessionInformation, String clientIp) {
