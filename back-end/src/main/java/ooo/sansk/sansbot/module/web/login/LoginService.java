@@ -51,7 +51,7 @@ public class LoginService {
     }
 
     private String generateLoginToken() {
-        return String.format("%6d", (secureRandom.nextInt(999999) + 1));
+        return String.format("%6d", (secureRandom.nextInt(999999) + 1)).replace(' ', '0');
     }
 
     private ZonedDateTime createLoginTokenExpirationTime() {

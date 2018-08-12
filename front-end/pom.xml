@@ -11,9 +11,14 @@
 
     <artifactId>front-end</artifactId>
     <name>Sansbot Front-end</name>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/javascript/dist</directory>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>com.github.eirslett</groupId>

@@ -12,9 +12,13 @@
 
     <artifactId>back-end</artifactId>
     <name>Sansbot Back-end</name>
-    <packaging>pom</packaging>
-
+    
     <dependencies>
+        <dependency>
+            <groupId>ooo.sansk.sansbot</groupId>
+            <artifactId>front-end</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>

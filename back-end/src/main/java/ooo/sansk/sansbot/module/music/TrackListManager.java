@@ -55,7 +55,7 @@ public class TrackListManager implements AudioEventListener {
         AudioSourceManagers.registerLocalSource(audioPlayerManager);
         AudioSourceManagers.registerRemoteSources(audioPlayerManager);
         Guild guild = jda.getGuilds().get(0);
-        for(VoiceChannel voiceChannel : guild.getVoiceChannels()) {
+        for (VoiceChannel voiceChannel : guild.getVoiceChannels()) {
             guild.getAudioManager().openAudioConnection(voiceChannel);
         }
         audioPlayer = audioPlayerManager.createPlayer();
@@ -67,7 +67,7 @@ public class TrackListManager implements AudioEventListener {
         guild.getAudioManager().setSendingHandler(new AudioPlayerSendHandler(audioPlayer));
     }
 
-    public void loadTrack(String track){
+    public void loadTrack(String track) {
         audioPlayerManager.loadItem(track, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
@@ -75,7 +75,8 @@ public class TrackListManager implements AudioEventListener {
             }
 
             @Override
-            public void playlistLoaded(AudioPlaylist playlist) {}
+            public void playlistLoaded(AudioPlaylist playlist) {
+            }
 
             @Override
             public void noMatches() {
@@ -90,7 +91,7 @@ public class TrackListManager implements AudioEventListener {
     }
 
     private void queueSingleTrack(AudioTrack audioTrack) {
-        if(queue.isEmpty() && audioPlayer.getPlayingTrack() == null) {
+        if (queue.isEmpty() && audioPlayer.getPlayingTrack() == null) {
             play(audioTrack);
         } else {
             queue.add(audioTrack);
@@ -112,7 +113,7 @@ public class TrackListManager implements AudioEventListener {
     }
 
     public boolean pause() {
-        if(audioPlayer.getPlayingTrack() != null) {
+        if (audioPlayer.getPlayingTrack() != null) {
             audioPlayer.setPaused(true);
             return true;
         } else {
@@ -122,9 +123,9 @@ public class TrackListManager implements AudioEventListener {
 
     public boolean resume() {
         audioPlayer.setPaused(false);
-        if(audioPlayer.getPlayingTrack() == null) {
+        if (audioPlayer.getPlayingTrack() == null) {
             AudioTrack track = queue.poll();
-            if(track != null) {
+            if (track != null) {
                 play(track);
                 return true;
             }
@@ -134,7 +135,7 @@ public class TrackListManager implements AudioEventListener {
         }
     }
 
-    public AudioTrack getCurrentTrack(){
+    public AudioTrack getCurrentTrack() {
         return audioPlayer.getPlayingTrack();
     }
 
@@ -144,13 +145,13 @@ public class TrackListManager implements AudioEventListener {
 
     @Override
     public void onEvent(AudioEvent event) {
-        if(event instanceof TrackEndEvent) {
+        if (event instanceof TrackEndEvent) {
             handleTrackEndEvent();
         }
     }
 
     private void handleTrackEndEvent() {
-        if(playlistQueue.isEmpty())
+        if (playlistQueue.isEmpty())
             playNextQueuedTrack();
         else
             playNextPlayListTrack();
@@ -158,9 +159,8 @@ public class TrackListManager implements AudioEventListener {
 
     private void playNextQueuedTrack() {
         AudioTrack track = queue.poll();
-        if(track != null) {
+        if (track != null)
             play(track);
-        }
     }
 
     private void playNextPlayListTrack() {
@@ -175,7 +175,8 @@ public class TrackListManager implements AudioEventListener {
             }
 
             @Override
-            public void playlistLoaded(AudioPlaylist playlist) {}
+            public void playlistLoaded(AudioPlaylist playlist) {
+            }
 
             @Override
             public void noMatches() {
