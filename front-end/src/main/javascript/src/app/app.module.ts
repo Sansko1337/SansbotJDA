@@ -12,6 +12,7 @@ import {LoginGuard} from './service/login.guard';
 import {LoginService} from './service/login.service';
 import {SidebarComponent} from "./component/sidebar/sidebar.component";
 import {ScheduleComponent} from "./view/schedule/schedule.component";
+import {ScheduleService} from "./view/schedule/schedule.service";
 
 @NgModule({
   declarations: [
@@ -24,7 +25,7 @@ import {ScheduleComponent} from "./view/schedule/schedule.component";
     ScheduleComponent
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule],
-  providers: [LoginService, LoginGuard],
+  providers: [LoginService, LoginGuard, ScheduleService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

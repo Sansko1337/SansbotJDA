@@ -11,22 +11,28 @@ import spark.Request;
 import spark.Response;
 
 @Component
-@Mapping(location = SoundEffectsController.BASE_URL)
-public class SoundEffectsController implements Controller {
+@Mapping(location = TrackScheduleController.BASE_URL)
+public class TrackScheduleController implements Controller {
 
     public static final String BASE_URL = "/api/music";
 
     private final ObjectMapper objectMapper;
     private final TrackListManager trackListManager;
 
-    public SoundEffectsController(ObjectMapper objectMapper, TrackListManager trackListManager) {
+    public TrackScheduleController(ObjectMapper objectMapper, TrackListManager trackListManager) {
         this.objectMapper = objectMapper;
         this.trackListManager = trackListManager;
     }
 
-    @Mapping()
+    @Mapping
     public String getCurrentQueue(Request request, Response response) throws Exception {
         response.body(objectMapper.writeValueAsString(trackListManager.getQueue()));
+        return response.body();
+    }
+
+    @Mapping(location = "/current")
+    public String getCurrentPlaying(Request request, Response response) throws Exception {
+        response.body(objectMapper.writeValueAsString(trackListManager.getCurrentTrack()));
         return response.body();
     }
 

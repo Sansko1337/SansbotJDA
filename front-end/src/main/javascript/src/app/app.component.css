@@ -1,7 +1,7 @@
 html, body, app-root {
   margin: 0;
-  width: 100vw;
-  height: 100vh;
+  min-width: 100%;
+  min-height: 100%;
   background-color: rgba(42, 44, 49, 1);
 
   color: #fafafa;

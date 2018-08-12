@@ -7,7 +7,6 @@ import ooo.sansk.sansbot.module.web.login.LoginController;
 import ooo.sansk.sansbot.module.web.session.SessionFilter;
 import ooo.sansk.sansbot.module.web.util.Controller;
 import ooo.sansk.sansbot.module.web.util.Mapping;
-import ooo.sansk.sansbot.module.web.util.MappingType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spark.Request;
@@ -31,12 +30,12 @@ public class SparkConfiguration {
     public SparkConfiguration(@Property("web.port") String port,
                               SessionFilter sessionFilter,
                               LoginController loginController,
-                              SoundEffectsController soundEffectsController) {
+                              TrackScheduleController trackScheduleController) {
         this.port = Integer.valueOf(port);
         this.sessionFilter = sessionFilter;
         controllerList = new ArrayList<>();
         controllerList.add(loginController);
-        controllerList.add(soundEffectsController);
+        controllerList.add(trackScheduleController);
     }
 
     @AfterCreate
