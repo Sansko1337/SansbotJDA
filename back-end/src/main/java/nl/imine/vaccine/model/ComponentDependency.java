@@ -1,13 +1,6 @@
 package nl.imine.vaccine.model;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.Arrays;
-
 public class ComponentDependency {
-
-    private static Logger logger = LoggerFactory.getLogger(ComponentDependency.class);
 
     private final Class type;
     private final Class[] dependencies;
