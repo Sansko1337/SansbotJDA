@@ -1,6 +1,8 @@
 package nl.imine.vaccine.testresources.provider;
 
+import nl.imine.vaccine.IVaccine;
 import nl.imine.vaccine.Vaccine;
+import nl.imine.vaccine.VaccineTwoElectricBoogaloo;
 import nl.imine.vaccine.annotation.Component;
 import nl.imine.vaccine.annotation.Provided;
 import nl.imine.vaccine.exception.UnknownDependencyException;
@@ -14,16 +16,16 @@ import static junit.framework.Assert.assertNotNull;
 
 public class ProviderTest {
 
-    private Vaccine vaccine;
+    private IVaccine vaccine;
 
     @Before
     public void setUp() throws Exception {
-        vaccine = new Vaccine();
+        vaccine = new VaccineTwoElectricBoogaloo(new Properties());
     }
 
     @Test
     public void testProviderAnnotation() {
-        vaccine.inject(new Properties(), "nl.imine.vaccine.testresources.provider");
+        vaccine.inject("nl.imine.vaccine.testresources.provider");
         assertNotNull(((ProviderTest.ParentB) vaccine.getInjected(ProviderTest.ParentB.class).orElseThrow(null)).getChildProvided());
     }
 

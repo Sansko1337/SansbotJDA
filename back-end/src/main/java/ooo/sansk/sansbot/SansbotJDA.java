@@ -52,8 +52,8 @@ public class SansbotJDA {
             System.exit(1);
         }
 
-        Vaccine vaccine = new Vaccine();
-        vaccine.inject(mergedProperties, "ooo.sansk.sansbot");
+        Vaccine vaccine = new Vaccine(mergedProperties);
+        vaccine.inject("ooo.sansk.sansbot");
 
         listenForStopCommand();
     }

@@ -1,6 +1,8 @@
 package nl.imine.vaccine.testresources.property;
 
+import nl.imine.vaccine.IVaccine;
 import nl.imine.vaccine.Vaccine;
+import nl.imine.vaccine.VaccineTwoElectricBoogaloo;
 import nl.imine.vaccine.annotation.Component;
 import nl.imine.vaccine.annotation.Property;
 import org.junit.Before;
@@ -13,21 +15,23 @@ import static org.junit.Assert.assertEquals;
 
 public class PropertyTest {
 
-    private Vaccine vaccine;
+    private IVaccine vaccine;
+    public static final String PARENT_PROPERTY = "parentProperty";
+    public static final String CHILD_PROPERTY = "childProperty";
 
     @Before
     public void setUp() throws Exception {
-        vaccine = new Vaccine();
+        Properties properties = new Properties();
+        properties.setProperty("parent", PARENT_PROPERTY);
+        properties.setProperty("child", CHILD_PROPERTY);
+
+        vaccine = new VaccineTwoElectricBoogaloo(properties);
     }
 
     @Test
     public void testPropertyResolver() {
-        Properties properties = new Properties();
-        String parentProperty = "parentProperty";
-        String childProperty = "childProperty";
-        properties.setProperty("parent", parentProperty);
-        properties.setProperty("child", childProperty);
-        vaccine.inject(properties, "nl.imine.vaccine.testresources.property");
+
+        vaccine.inject("nl.imine.vaccine.testresources.property");
 
         PropertyTest.PropertyHolderParent propertyHolderParent = (PropertyTest.PropertyHolderParent) vaccine.getInjected(PropertyTest.PropertyHolderParent.class).orElse(null);
         PropertyTest.PropertyHolderChild propertyHolderChild = (PropertyTest.PropertyHolderChild) vaccine.getInjected(PropertyTest.PropertyHolderChild.class).orElse(null);
@@ -37,8 +41,8 @@ public class PropertyTest {
 
         assertEquals(propertyHolderChild, propertyHolderParent.getPropertyHolderChild());
 
-        assertEquals(parentProperty, propertyHolderParent.getProperty());
-        assertEquals(childProperty, propertyHolderChild.getProperty());
+        assertEquals(PARENT_PROPERTY, propertyHolderParent.getProperty());
+        assertEquals(CHILD_PROPERTY, propertyHolderChild.getProperty());
     }
 
     @Component

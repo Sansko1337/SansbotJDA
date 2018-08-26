@@ -1,6 +1,8 @@
 package nl.imine.vaccine.testresources.circularcomplex;
 
+import nl.imine.vaccine.IVaccine;
 import nl.imine.vaccine.Vaccine;
+import nl.imine.vaccine.VaccineTwoElectricBoogaloo;
 import nl.imine.vaccine.annotation.Component;
 import nl.imine.vaccine.exception.CircularDependencyException;
 import org.junit.Before;
@@ -10,17 +12,17 @@ import java.util.Properties;
 
 public class CircularComplexTest {
 
-    private Vaccine vaccine;
+    private IVaccine vaccine;
 
     @Before
     public void setUp() throws Exception {
-        vaccine = new Vaccine();
+        vaccine = new VaccineTwoElectricBoogaloo(new Properties());
     }
 
     //Dependency circle A->B->C->E->D->A
     @Test(expected = CircularDependencyException.class)
     public void testPreventCircularDependenciesComplex() {
-        vaccine.inject(new Properties(), "nl.imine.vaccine.testresources.circularcomplex");
+        vaccine.inject("nl.imine.vaccine.testresources.circularcomplex");
     }
 
     @Component

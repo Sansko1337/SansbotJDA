@@ -1,6 +1,8 @@
 package nl.imine.vaccine.testresources.complextree;
 
+import nl.imine.vaccine.IVaccine;
 import nl.imine.vaccine.Vaccine;
+import nl.imine.vaccine.VaccineTwoElectricBoogaloo;
 import nl.imine.vaccine.annotation.Component;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,16 +15,16 @@ import static org.junit.Assert.assertEquals;
 
 public class ComplexTreeTest {
 
-    private Vaccine vaccine;
+    private IVaccine vaccine;
 
     @Before
     public void setUp() throws Exception {
-        vaccine = new Vaccine();
+        vaccine = new VaccineTwoElectricBoogaloo(new Properties());
     }
 
     @Test
     public void testComplexTreeNoDuplicated() {
-        vaccine.inject(new Properties(), "nl.imine.vaccine.testresources.complextree");
+        vaccine.inject("nl.imine.vaccine.testresources.complextree");
         Map<Class, Long> occurrences = vaccine.getCandidates().stream().collect(Collectors.groupingBy(Object::getClass, Collectors.counting()));
         occurrences.forEach((k, v) -> assertEquals(1, (long) v));
     }

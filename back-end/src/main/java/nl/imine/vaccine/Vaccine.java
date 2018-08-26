@@ -16,18 +16,21 @@ import java.lang.reflect.Parameter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Vaccine {
+public class Vaccine implements IVaccine {
 
     private static final Logger logger = LoggerFactory.getLogger(Vaccine.class);
+
+    private final Properties properties;
 
     private List<Object> candidates = new ArrayList<>();
     private List<ComponentDependency> dependencies = new ArrayList<>();
 
-    private Properties properties;
 
-    public void inject(Properties properties, String basePackage) {
+    public Vaccine(Properties properties) {
         this.properties = properties;
+    }
 
+    public void inject(String basePackage) {
         logger.info("Initializing Injection");
         List<Class> classes = scanForComponentClasses(basePackage);
 
