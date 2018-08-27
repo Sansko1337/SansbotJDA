@@ -5,6 +5,7 @@ import nl.imine.vaccine.annotation.Component;
 import ooo.sansk.sansbot.command.ChatCommandHandler;
 import ooo.sansk.sansbot.module.music.TrackListManager;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class ResetSoundChatCommand extends AbstractMusicChatCommand {
 
     @Override
     public List<String> getTriggers() {
-        return Collections.singletonList("ResetSound");
+        return Arrays.asList("ResetSound", "ResetSounds", "RestartSound", "RestartSounds");
     }
 
     @Override
