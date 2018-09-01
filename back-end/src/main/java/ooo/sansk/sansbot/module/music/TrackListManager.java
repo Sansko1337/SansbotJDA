@@ -76,6 +76,7 @@ public class TrackListManager implements AudioEventListener {
 
             @Override
             public void playlistLoaded(AudioPlaylist playlist) {
+                playlist.getTracks().forEach(TrackListManager.this::queueSingleTrack);
             }
 
             @Override
