@@ -1,6 +1,7 @@
 package ooo.sansk.sansbot.module.fontimage;
 
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.requests.restaction.MessageAction;
 import nl.imine.vaccine.annotation.Component;
 import ooo.sansk.sansbot.command.ChatCommand;
 import ooo.sansk.sansbot.command.ChatCommandHandler;
@@ -47,10 +48,11 @@ public class TextToImageCommand extends ChatCommand {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             try {
                 ImageIO.write(textToImageConversionResult.getOutput(), "png", baos);
-                messageReceivedEvent.getChannel()
-                        .sendFile(baos.toByteArray(), "tti.png")
-                        .content(messageReceivedEvent.getMember().getAsMention())
-                        .submit();
+                MessageAction messageAction = messageReceivedEvent.getChannel().sendFile(baos.toByteArray(), "tti.png");
+                if (messageReceivedEvent.getChannel().getType().isGuild()) {
+                    messageAction = messageAction.content(messageReceivedEvent.getMember().getAsMention());
+                }
+                messageAction.submit();
             } catch (IOException e) {
                 logger.error("An error occurred while writing the image to Discord ({}: {})", e.getClass().getSimpleName(), e.getMessage());
                 reply(messageReceivedEvent.getChannel(), String.format("Ik zal eerlijk zijn %s.... Je hebt het gesloopt! :upside_down:", messageReceivedEvent.getAuthor().getAsMention()));
