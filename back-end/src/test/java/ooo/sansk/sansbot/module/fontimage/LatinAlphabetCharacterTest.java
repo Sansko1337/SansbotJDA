@@ -1,15 +1,10 @@
 package ooo.sansk.sansbot.module.fontimage;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class LatinAlphabetCharacterTest {
-
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
 
     @Test
     public void testFromCharacter_Valid() {
@@ -19,13 +14,11 @@ public class LatinAlphabetCharacterTest {
 
     @Test
     public void testFromCharacter_IndexTooLow() {
-        expectedException.expect(IllegalArgumentException.class);
-        LatinAlphabetCharacter.fromCharacter((char) ('A' - 1));
+        assertEquals(LatinAlphabetCharacter.WHITESPACE, LatinAlphabetCharacter.fromCharacter((char) ('A' - 1)));
     }
 
     @Test
     public void testFromCharacter_IndexTooHigh() {
-        expectedException.expect(IllegalArgumentException.class);
-        LatinAlphabetCharacter.fromCharacter((char) ('Z' + 1));
+        assertEquals(LatinAlphabetCharacter.WHITESPACE, LatinAlphabetCharacter.fromCharacter((char) ('Z' + 1)));
     }
 }
