@@ -32,7 +32,7 @@ public class PlayingChatCommand extends ChatCommand {
         if(track == null) {
             reply(messageReceivedEvent.getChannel(), String.format("%s, volgensmij zie je ze vliegen want ik speel niks af hoor... :confused:", messageReceivedEvent.getAuthor().getAsMention()));
         } else {
-            reply(messageReceivedEvent.getChannel(), String.format("%s, als ik mij niet vergis is dit... deze! :musical_score: \n%s", messageReceivedEvent.getAuthor().getAsMention(), track.getInfo().uri));
+            reply(messageReceivedEvent.getChannel(), String.format("%s, als ik mij niet vergis is dit... deze! :musical_score: %n%s", messageReceivedEvent.getAuthor().getAsMention(), track.getInfo().uri));
         }
     }
 }

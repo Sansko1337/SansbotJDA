@@ -16,7 +16,7 @@ public class ComplexTreeTest {
     private Vaccine vaccine;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         vaccine = new Vaccine();
     }
 

@@ -7,8 +7,6 @@ import nl.imine.vaccine.annotation.Component;
 import ooo.sansk.sansbot.command.ChatCommand;
 import ooo.sansk.sansbot.command.ChatCommandHandler;
 import ooo.sansk.sansbot.module.image.filter.InvertColorImageFilter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -20,7 +18,7 @@ import java.util.Optional;
 @Component
 public class ConvertImageCommand extends ChatCommand {
 
-    private static final Logger logger = LoggerFactory.getLogger(ConvertImageCommand.class);
+    private static final int MAX_FILE_SIZE_BYTES = 8388608;
 
     public ConvertImageCommand(ChatCommandHandler chatCommandHandler) {
         super(chatCommandHandler);
@@ -40,7 +38,7 @@ public class ConvertImageCommand extends ChatCommand {
 
         if (oBufferedImage.isPresent()) {
             ImageResult imageResult = new InvertColorImageFilter().doFilter(oBufferedImage.get());
-            if(imageResult.getImageData().length < 8388608) {
+            if (imageResult.getImageData().length < MAX_FILE_SIZE_BYTES) {
                 MessageAction messageAction = messageReceivedEvent.getChannel().sendFile(imageResult.getImageData(), "inverted.png");
                 if (messageReceivedEvent.getChannel().getType().isGuild()) {
                     messageAction = messageAction.content(messageReceivedEvent.getMember().getAsMention());

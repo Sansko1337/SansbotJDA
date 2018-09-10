@@ -44,7 +44,6 @@ public class PokedexAPI {
                     pokemonDexDescription.getDescription(),
                     jsonObject.getJSONObject("sprites").getString("front_default")));
         } catch (Exception e) {
-            e.printStackTrace();
             return Optional.empty();
         }
     }
@@ -57,7 +56,7 @@ public class PokedexAPI {
     }
 
     private String getRandomFlavorText(JSONObject jsonObject) {
-        String flavorText;List<PokemonFlavorText> flavorTextList = new ArrayList<>();
+        List<PokemonFlavorText> flavorTextList = new ArrayList<>();
         JSONArray flavorTextJsonArray = jsonObject.getJSONArray("flavor_text_entries");
         for (int i = 0; i < flavorTextJsonArray.length(); i++) {
             JSONObject flavorTextObject = flavorTextJsonArray.getJSONObject(i);
@@ -68,8 +67,7 @@ public class PokedexAPI {
                 ));
             }
         }
-        flavorText = flavorTextList.get(random.nextInt(flavorTextList.size())).getText();
-        return flavorText;
+        return flavorTextList.get(random.nextInt(flavorTextList.size())).getText();
     }
 
     private String getGenus(JSONObject jsonObject) {

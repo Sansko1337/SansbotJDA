@@ -1,5 +1,6 @@
 package ooo.sansk.sansbot.module.web;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.imine.vaccine.annotation.Component;
 import ooo.sansk.sansbot.module.music.TrackListManager;
@@ -25,13 +26,13 @@ public class TrackScheduleController implements Controller {
     }
 
     @Mapping
-    public String getCurrentQueue(Request request, Response response) throws Exception {
+    public String getCurrentQueue(Request request, Response response) throws JsonProcessingException {
         response.body(objectMapper.writeValueAsString(trackListManager.getQueue()));
         return response.body();
     }
 
     @Mapping(location = "/current")
-    public String getCurrentPlaying(Request request, Response response) throws Exception {
+    public String getCurrentPlaying(Request request, Response response) throws JsonProcessingException {
         response.body(objectMapper.writeValueAsString(trackListManager.getCurrentTrack()));
         return response.body();
     }

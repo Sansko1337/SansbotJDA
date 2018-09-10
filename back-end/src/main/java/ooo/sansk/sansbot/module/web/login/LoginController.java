@@ -1,5 +1,6 @@
 package ooo.sansk.sansbot.module.web.login;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.imine.vaccine.annotation.Component;
 import ooo.sansk.sansbot.module.web.util.Controller;
@@ -27,7 +28,7 @@ public class LoginController implements Controller {
     }
 
     @Mapping(type = MappingType.POST)
-    public String onLogin(Request request, Response response) throws Exception {
+    public String onLogin(Request request, Response response) throws JsonProcessingException {
         Optional<WebUserDetails> oWebUserDetails = loginService.attemptLogin(request, request.body());
         if (oWebUserDetails.isPresent())
             response.body(objectMapper.writeValueAsString(oWebUserDetails.get()));

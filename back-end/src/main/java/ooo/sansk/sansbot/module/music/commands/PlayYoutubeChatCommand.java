@@ -41,7 +41,7 @@ public class PlayYoutubeChatCommand extends AbstractMusicChatCommand {
                 reply(messageReceivedEvent.getChannel(), String.format("Maarree %s, dit is niet een linkje waar ik iets mee kan hè? :rolling_eyes:", messageReceivedEvent.getAuthor().getAsMention()));
                 return;
             }
-            chatCommandHandler.getDefaultOutputChannel().sendMessage(String.format(":notes: Onze grote DJ %s heeft het volgende plaatje aangevraagd! :notes:\n%s", messageReceivedEvent.getAuthor().getAsMention(), url)).queue();
+            chatCommandHandler.getDefaultOutputChannel().sendMessage(String.format(":notes: Onze grote DJ %s heeft het volgende plaatje aangevraagd! :notes:%n%s", messageReceivedEvent.getAuthor().getAsMention(), url)).queue();
             trackListManager.loadTrack(url);
         } else {
             reply(messageReceivedEvent.getChannel(), String.format("Ik ga geen dingen voor je opzetten als je er toch niet zelf naar gaat luisteren, %s... :expressionless:", messageReceivedEvent.getAuthor().getAsMention()));

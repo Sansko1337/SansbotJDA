@@ -83,7 +83,7 @@ public class SansbotJDA {
         try {
             return new JDABuilder(AccountType.BOT).setToken(botToken).buildBlocking();
         } catch (InterruptedException | LoginException e) {
-            System.out.println("Failed to create JDA");
+            logger.error("Failed to create JDA");
             System.exit(1);
             return null;
         }

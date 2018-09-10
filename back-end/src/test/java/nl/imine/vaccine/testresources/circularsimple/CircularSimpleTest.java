@@ -13,7 +13,7 @@ public class CircularSimpleTest {
     private Vaccine vaccine;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         vaccine = new Vaccine();
     }
 

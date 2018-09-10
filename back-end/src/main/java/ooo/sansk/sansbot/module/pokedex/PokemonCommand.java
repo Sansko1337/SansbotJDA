@@ -41,9 +41,7 @@ public class PokemonCommand extends ChatCommand {
                     EmbedBuilder embedBuilder = new EmbedBuilder().setAuthor("Pokédex", PokedexAPI.BASE_URL, PokedexAPI.POKEDEX_ICON)
                             .setTitle(String.format("#%s: %s", String.valueOf(pokemon.getId()), capitalize(pokemon.getName())))
                             .addField("Primary Type", capitalize(pokemon.getPrimaryType().name()), true);
-                    pokemon.getSecondaryType().ifPresent(type -> {
-                        embedBuilder.addField("Secondary Type", capitalize(type.name()), true);
-                    });
+                    pokemon.getSecondaryType().ifPresent(type -> embedBuilder.addField("Secondary Type", capitalize(type.name()), true));
                     embedBuilder.addField("Description", pokemon.getDescription(), false)
                             .setThumbnail(pokemon.getSpriteUrl())
                             .setColor(pokemon.getPrimaryType().getColor())

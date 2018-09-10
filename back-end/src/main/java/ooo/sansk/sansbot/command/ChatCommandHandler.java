@@ -38,9 +38,9 @@ public class ChatCommandHandler implements EventListener {
                 logger.error("Bot is not allowed to talk in set output channel ({})", defaultOutputChannel.getName());
             }
         } else {
-            TextChannel defaultOutputChannel = jda.getTextChannels().get(0);
-            logger.warn("Default bot command output channel not set, defaulting to first available channel (#{})", defaultOutputChannel.getName());
-            this.defaultOutputChannel = defaultOutputChannel;
+            TextChannel fallbackOutputChannel = jda.getTextChannels().get(0);
+            logger.warn("Default bot command output channel not set, defaulting to first available channel (#{})", fallbackOutputChannel.getName());
+            this.defaultOutputChannel = fallbackOutputChannel;
         }
     }
 
@@ -58,7 +58,7 @@ public class ChatCommandHandler implements EventListener {
             if (contentRaw.startsWith(commandPrefix)) {
                 String input = contentRaw.substring(1);
                 for (ChatCommand chatCommand : chatCommands) {
-                    if (chatCommand.getTriggers().stream().anyMatch(trigger -> input.split(" ")[0].equalsIgnoreCase(trigger))) {
+                    if (chatCommand.getTriggers().stream().anyMatch(input.split(" ")[0]::equalsIgnoreCase)) {
                         chatCommand.handle(messageReceivedEvent);
                         return;
                     }

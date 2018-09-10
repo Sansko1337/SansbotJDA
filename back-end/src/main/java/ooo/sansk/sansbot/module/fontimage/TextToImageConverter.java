@@ -11,8 +11,6 @@ import java.util.stream.Stream;
 @Component
 public class TextToImageConverter {
 
-    private static final Logger logger = LoggerFactory.getLogger(TextToImageConverter.class);
-
     private final FontLoader fontLoader;
 
     public TextToImageConverter(FontLoader fontLoader) {

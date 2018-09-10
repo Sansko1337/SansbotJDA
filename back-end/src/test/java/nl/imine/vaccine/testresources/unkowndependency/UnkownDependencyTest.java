@@ -18,7 +18,7 @@ public class UnkownDependencyTest {
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         vaccine = new Vaccine();
     }
 
@@ -29,6 +29,6 @@ public class UnkownDependencyTest {
         }
     }
 
-    private static class UnknownComponent {
+    private interface UnknownComponent {
     }
 }

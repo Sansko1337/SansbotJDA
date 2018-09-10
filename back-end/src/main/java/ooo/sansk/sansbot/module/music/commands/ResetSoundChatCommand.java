@@ -6,7 +6,6 @@ import ooo.sansk.sansbot.command.ChatCommandHandler;
 import ooo.sansk.sansbot.module.music.TrackListManager;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @Component

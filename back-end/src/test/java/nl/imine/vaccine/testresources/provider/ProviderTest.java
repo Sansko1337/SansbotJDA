@@ -3,11 +3,9 @@ package nl.imine.vaccine.testresources.provider;
 import nl.imine.vaccine.Vaccine;
 import nl.imine.vaccine.annotation.Component;
 import nl.imine.vaccine.annotation.Provided;
-import nl.imine.vaccine.exception.UnknownDependencyException;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Properties;
 
 import static junit.framework.Assert.assertNotNull;
@@ -17,7 +15,7 @@ public class ProviderTest {
     private Vaccine vaccine;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         vaccine = new Vaccine();
     }
 

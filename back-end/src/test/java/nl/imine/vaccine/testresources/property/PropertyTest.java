@@ -16,7 +16,7 @@ public class PropertyTest {
     private Vaccine vaccine;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         vaccine = new Vaccine();
     }
 
@@ -29,8 +29,8 @@ public class PropertyTest {
         properties.setProperty("child", childProperty);
         vaccine.inject(properties, "nl.imine.vaccine.testresources.property");
 
-        PropertyTest.PropertyHolderParent propertyHolderParent = (PropertyTest.PropertyHolderParent) vaccine.getInjected(PropertyTest.PropertyHolderParent.class).orElse(null);
-        PropertyTest.PropertyHolderChild propertyHolderChild = (PropertyTest.PropertyHolderChild) vaccine.getInjected(PropertyTest.PropertyHolderChild.class).orElse(null);
+        PropertyTest.PropertyHolderParent propertyHolderParent = (PropertyTest.PropertyHolderParent) vaccine.getInjected(PropertyTest.PropertyHolderParent.class).orElseThrow(NullPointerException::new);
+        PropertyTest.PropertyHolderChild propertyHolderChild = (PropertyTest.PropertyHolderChild) vaccine.getInjected(PropertyTest.PropertyHolderChild.class).orElseThrow(NullPointerException::new);
 
         assertNotNull(propertyHolderParent);
         assertNotNull(propertyHolderChild);
