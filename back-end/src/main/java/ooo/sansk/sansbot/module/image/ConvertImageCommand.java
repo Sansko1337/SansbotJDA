@@ -2,14 +2,12 @@ package ooo.sansk.sansbot.module.image;
 
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.requests.Route;
 import net.dv8tion.jda.core.requests.restaction.MessageAction;
 import nl.imine.vaccine.annotation.Component;
 import ooo.sansk.sansbot.command.ChatCommand;
 import ooo.sansk.sansbot.command.ChatCommandHandler;
 import ooo.sansk.sansbot.module.image.filter.FilterType;
 import ooo.sansk.sansbot.module.image.filter.ImageFilter;
-import ooo.sansk.sansbot.module.image.filter.InvertColorImageFilter;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
