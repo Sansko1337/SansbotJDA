@@ -8,7 +8,8 @@ import java.util.stream.Stream;
 public enum FilterType {
 
     INVERT(new InvertColorImageFilter(), Arrays.asList("inverted", "invert", "i")),
-    BW(new BlackWhiteColorImageFilter(), Arrays.asList("blackwhite", "bw"));
+    BW(new BlackWhiteColorImageFilter(), Arrays.asList("blackwhite", "bw")),
+    GAUSSIAN_BLUR(new GaussianImageFilter(), Arrays.asList("blur", "gauss"));
 
     private final ImageFilter filter;
     private final List<String> aliases;
