@@ -40,7 +40,7 @@ public class TrackScheduleController implements Controller {
     @Mapping(type = MappingType.POST)
     public String postTrack(Request request, Response response) {
         String url = new JSONObject(request.body()).getString("url");
-        trackListManager.loadTrack(url);
+        trackListManager.loadTrack(url, "een of andere sukkel over de API");
         response.body("Added track " + url);
         return response.body();
     }

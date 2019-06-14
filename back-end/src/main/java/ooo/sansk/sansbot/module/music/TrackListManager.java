@@ -14,6 +14,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.VoiceChannel;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import nl.imine.vaccine.annotation.AfterCreate;
 import nl.imine.vaccine.annotation.Component;
 import ooo.sansk.sansbot.module.music.playlist.PlayList;
@@ -24,7 +25,9 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.function.Supplier;
 
 @Component
 public class TrackListManager implements AudioEventListener {
@@ -67,28 +70,33 @@ public class TrackListManager implements AudioEventListener {
         guild.getAudioManager().setSendingHandler(new AudioPlayerSendHandler(audioPlayer));
     }
 
-    public void loadTrack(String track) {
+    public CompletableFuture<String> loadTrack(String track, String messageSender) {
+        CompletableFuture<String> resultMessage = new CompletableFuture<>();
         audioPlayerManager.loadItem(track, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
                 queueSingleTrack(track);
+                resultMessage.complete(String.format(":notes: Onze grote DJ %s heeft het volgende plaatje aangevraagd! :notes:%n%s", messageSender, track));
             }
 
             @Override
             public void playlistLoaded(AudioPlaylist playlist) {
+                resultMessage.complete(String.format(":notes: Bereid je voor! %s heeft een hele stapel plaatjes aangevraagd! :notes:%n%s", messageSender, track));
                 playlist.getTracks().forEach(TrackListManager.this::queueSingleTrack);
             }
 
             @Override
             public void noMatches() {
-                logger.warn("No match found for track \"{}\"", track);
+                resultMessage.complete(String.format(":angry: Ik snap geen hol van die muziek van je, %s! Ik kan niks vinden wat ook maar een *beetje* lijkt op wat je me net vroeg...", messageSender));
             }
 
             @Override
             public void loadFailed(FriendlyException e) {
-                logger.error("An exception occurred while loading AudioTrack ({}: {})", e.getCause().getClass().getSimpleName(), e.getMessage());
+                resultMessage.complete(String.format(":fire: *Tijdens het aanvragen van %s's nummertje is de jukebox in de brand gevlogen. Wij zijn druk bezig met het vuur te blussen* :fire:", messageSender));
+                logger.error("An exception occurred while loading AudioTrack", e);
             }
         });
+        return resultMessage;
     }
 
     private void queueSingleTrack(AudioTrack audioTrack) {

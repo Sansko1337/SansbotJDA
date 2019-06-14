@@ -25,13 +25,8 @@ public class FontLoader {
 
     private Map<String, ImageFont> loadFonts() {
         Map<String, ImageFont> loadedFonts;
-        try {
-            File fontFolder = new File(ClassLoader.getSystemResource("img-fonts").toURI());
-            loadedFonts = loadFontsFromResourceFolder(fontFolder);
-        } catch (URISyntaxException e) {
-            logger.info("Failed to load fonts. ({}: {})", e.getClass().getSimpleName(), e.getMessage());
-            loadedFonts = Collections.emptyMap();
-        }
+        File fontFolder = new File("img-fonts");
+        loadedFonts = loadFontsFromResourceFolder(fontFolder);
         return loadedFonts;
     }
 
@@ -63,7 +58,7 @@ public class FontLoader {
         for (File imageFile : files) {
             LatinAlphabetCharacter key = LatinAlphabetCharacter.fromCharacter(imageFile.getName().charAt(0));
             ImageCharacter imageCharacter = getImageCharacter(imageFile, key);
-            if(imageCharacter != null) {
+            if (imageCharacter != null) {
                 characters.put(key, imageCharacter);
             }
         }

@@ -17,16 +17,16 @@ export class LoginService {
   }
 
   login(authenticationCode: string) {
-    // this.http
-    //   .post<User>(Endpoints.LOGIN, authenticationCode)
-    //   .subscribe(
-    //     user => this.handleLoginSuccess(user),
-    //     error => this.handleLoginError(error)
-    //   );
-    this.handleLoginSuccess(<User> {
-      username: "Sander",
-      avatarUrl: "https://cdn.discordapp.com/avatars/136197570501410816/67f21bb1e1b7895736e4011ade88a348.png"
-    });
+    this.http
+      .post<User>(Endpoints.LOGIN, authenticationCode)
+      .subscribe(
+        user => this.handleLoginSuccess(user),
+        error => this.handleLoginError(error)
+      );
+    // this.handleLoginSuccess(<User> {
+    //   username: "Sander",
+    //   avatarUrl: "https://cdn.discordapp.com/avatars/136197570501410816/67f21bb1e1b7895736e4011ade88a348.png"
+    // });
   }
 
   logout() {

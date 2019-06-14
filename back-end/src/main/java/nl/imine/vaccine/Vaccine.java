@@ -185,10 +185,7 @@ public class Vaccine {
                     try {
                         method.invoke(injectable);
                     } catch (IllegalAccessException | InvocationTargetException e) {
-                        logger.error("Could not run @PostConstruct for {}. Reason: ({}: {})",
-                                injectable.getClass().getName(),
-                                e.getClass().getSimpleName(),
-                                e.getMessage());
+                        logger.error("Could not run @PostConstruct for {}. {}", injectable.getClass().getName(), e);
                     }
                 });
     }
