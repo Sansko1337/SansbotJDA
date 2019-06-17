@@ -2,14 +2,16 @@ package ooo.sansk.sansbot.module.web;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import nl.imine.vaccine.annotation.Component;
 import ooo.sansk.sansbot.module.music.TrackListManager;
 import ooo.sansk.sansbot.module.web.util.Controller;
 import ooo.sansk.sansbot.module.web.util.Mapping;
 import ooo.sansk.sansbot.module.web.util.MappingType;
-import org.json.JSONObject;
 import spark.Request;
 import spark.Response;
+
+import java.io.IOException;
 
 @Component
 @Mapping(location = TrackScheduleController.BASE_URL)
@@ -38,8 +40,8 @@ public class TrackScheduleController implements Controller {
     }
 
     @Mapping(type = MappingType.POST)
-    public String postTrack(Request request, Response response) {
-        String url = new JSONObject(request.body()).getString("url");
+    public String postTrack(Request request, Response response) throws IOException {
+        String url = new ObjectMapper().readValue(request.body(), ObjectNode.class).get("url").asText();
         trackListManager.loadTrack(url, "een of andere sukkel over de API");
         response.body("Added track " + url);
         return response.body();

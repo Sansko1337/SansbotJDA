@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
@@ -48,7 +49,7 @@ public class TrackListManager implements AudioEventListener {
         this.jda = jda;
         this.playListService = playListService;
         this.audioPlayerManager = new DefaultAudioPlayerManager();
-        this.queue = new LinkedBlockingQueue<>();
+        this.queue = new LinkedList<>();
         this.playlistQueue = new ArrayList<>();
         this.currentPlayMode = PlayMode.SEQUENTIAL;
     }
@@ -70,19 +71,19 @@ public class TrackListManager implements AudioEventListener {
         guild.getAudioManager().setSendingHandler(new AudioPlayerSendHandler(audioPlayer));
     }
 
-    public CompletableFuture<String> loadTrack(String track, String messageSender) {
+    public CompletableFuture<String> loadTrack(String trackUrl, String messageSender) {
         CompletableFuture<String> resultMessage = new CompletableFuture<>();
-        audioPlayerManager.loadItem(track, new AudioLoadResultHandler() {
+        audioPlayerManager.loadItem(trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
                 queueSingleTrack(track);
-                resultMessage.complete(String.format(":notes: Onze grote DJ %s heeft het volgende plaatje aangevraagd! :notes:%n%s", messageSender, track));
+                resultMessage.complete(String.format(":notes: Onze grote DJ %s heeft het volgende plaatje aangevraagd! :notes:%n%s", messageSender, trackUrl));
             }
 
             @Override
             public void playlistLoaded(AudioPlaylist playlist) {
-                resultMessage.complete(String.format(":notes: Bereid je voor! %s heeft een hele stapel plaatjes aangevraagd! :notes:%n%s", messageSender, track));
                 playlist.getTracks().forEach(TrackListManager.this::queueSingleTrack);
+                resultMessage.complete(String.format(":notes: Bereid je voor! %s heeft een hele stapel plaatjes aangevraagd! :notes:%n%s", messageSender, trackUrl));
             }
 
             @Override
