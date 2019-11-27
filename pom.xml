@@ -10,14 +10,14 @@
     <packaging>pom</packaging>
 
     <properties>
-        <java.version>1.9</java.version>
-        <maven.compiler.source>1.9</maven.compiler.source>
-        <maven.compiler.target>1.9</maven.compiler.target>
+        <java.version>12</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}}</maven.compiler.target>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <frontend.maven.plugin.version>1.6</frontend.maven.plugin.version>
-        <frontend.maven.plugin.node.version>v10.5.0</frontend.maven.plugin.node.version>
-        <frontend.maven.plugin.npm.version>6.1.0</frontend.maven.plugin.npm.version>
+        <frontend.maven.plugin.version>1.8.0</frontend.maven.plugin.version>
+        <frontend.maven.plugin.node.version>v10.16.3</frontend.maven.plugin.node.version>
+        <frontend.maven.plugin.npm.version>6.12.0</frontend.maven.plugin.npm.version>
     </properties>
 
     <modules>
