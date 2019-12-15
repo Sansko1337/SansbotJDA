@@ -26,19 +26,19 @@ public class MoveChannelCommand extends AbstractMusicChatCommand {
     @Override
     public void handle(MessageReceivedEvent messageReceivedEvent) {
         deleteMessageIfPossible(messageReceivedEvent.getMessage());
-        if(!messageReceivedEvent.getGuild().getSelfMember().getVoiceState().inVoiceChannel()) {
+        if (!messageReceivedEvent.getGuild().getSelfMember().getVoiceState().inVoiceChannel()) {
             reply(messageReceivedEvent.getChannel(), String.format("Sorry %s, ik ben even niet beschikbaar voor je feestje... :disappointed:", messageReceivedEvent.getAuthor().getAsMention()));
             return;
         }
-        if(messageReceivedEvent.getGuild().getSelfMember().getVoiceState().getChannel().equals(messageReceivedEvent.getMember().getVoiceState().getChannel())) {
+        if (messageReceivedEvent.getGuild().getSelfMember().getVoiceState().getChannel().equals(messageReceivedEvent.getMember().getVoiceState().getChannel())) {
             reply(messageReceivedEvent.getChannel(), String.format("Uhh, volgensmij ben ik er al hoor, %s? :thinking:", messageReceivedEvent.getAuthor().getAsMention()));
             return;
         }
-        if(!messageReceivedEvent.getMember().getVoiceState().inVoiceChannel()) {
+        if (!messageReceivedEvent.getMember().getVoiceState().inVoiceChannel()) {
             reply(messageReceivedEvent.getChannel(), String.format("Zeg %s, je zit helemaal niet in een kanaal. Hoe moet ik nu weten waar ik naartoe moet?! :confused:", messageReceivedEvent.getAuthor().getAsMention()));
             return;
         }
-        if(trackListManager.getCurrentTrack() != null) {
+        if (trackListManager.getCurrentTrack() != null) {
             reply(messageReceivedEvent.getChannel(), String.format("Sorry, anderen waren eerst en die zijn nog aan het genieten van de muziek. Probeer het anders later nog eens, %s? :upside_down:", messageReceivedEvent.getAuthor().getAsMention()));
             return;
         }

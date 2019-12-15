@@ -3,12 +3,19 @@ package ooo.sansk.sansbot.module.web.session;
 import nl.imine.vaccine.annotation.Component;
 import spark.*;
 
+import java.time.Clock;
 import java.time.ZonedDateTime;
 
 @Component
 public class SessionFilter implements Filter {
 
     public static final String SESSION_INFORMATION = "sessionInformation";
+
+    private final Clock clock;
+
+    public SessionFilter(Clock clock) {
+        this.clock = clock;
+    }
 
     @Override
     public void handle(Request request, Response response) {
@@ -41,10 +48,10 @@ public class SessionFilter implements Filter {
 
     private void renewSession(Session session) {
         SessionInformation sessionInformation = session.attribute(SESSION_INFORMATION);
-        session.attribute(SESSION_INFORMATION, new SessionInformation(sessionInformation.getIp(), createSessionTokenExpirationTime()));
+        session.attribute(SESSION_INFORMATION, new SessionInformation(sessionInformation.getIp(), createSessionTokenExpirationTime(), clock));
     }
 
     private ZonedDateTime createSessionTokenExpirationTime() {
-        return ZonedDateTime.now().plusHours(2);
+        return ZonedDateTime.now(clock).plusHours(2);
     }
 }
