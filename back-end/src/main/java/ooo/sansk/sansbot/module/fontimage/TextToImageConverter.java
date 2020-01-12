@@ -1,8 +1,6 @@
 package ooo.sansk.sansbot.module.fontimage;
 
 import nl.imine.vaccine.annotation.Component;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.awt.image.BufferedImage;
 import java.util.Optional;

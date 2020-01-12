@@ -15,15 +15,16 @@ public class SessionFilter implements Filter {
         if (request.pathInfo().equals("/login"))
             return;
         Session session = request.session();
-        validateSession(session, request, response);
+        validateSession(session, request);
     }
 
-    private void validateSession(Session session, Request request, Response response) {
+    private void validateSession(Session session, Request request) {
         Object sessionInformation = session.attribute(SESSION_INFORMATION);
-        if (!isSessionValid(request, sessionInformation))
+        if (!isSessionValid(request, sessionInformation)) {
             invalidateSession(session);
-        else
+        } else {
             renewSession(session);
+        }
     }
 
     private void invalidateSession(Session session) {

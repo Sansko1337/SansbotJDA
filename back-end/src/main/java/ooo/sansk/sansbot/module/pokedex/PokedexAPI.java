@@ -19,6 +19,7 @@ public class PokedexAPI {
     private static final String SPECIES_ENDPOINT = API_URL + "pokemon-species/";
 
     private static final Random random = new Random();
+    public static final String JSON_KEY_LANGUAGE = "language";
 
     public Optional<Pokemon> getPokemon(String pokemonId) {
         try {
@@ -60,9 +61,9 @@ public class PokedexAPI {
         JSONArray flavorTextJsonArray = jsonObject.getJSONArray("flavor_text_entries");
         for (int i = 0; i < flavorTextJsonArray.length(); i++) {
             JSONObject flavorTextObject = flavorTextJsonArray.getJSONObject(i);
-            if(flavorTextObject.getJSONObject("language").getString("name").equals("en")) {
+            if(flavorTextObject.getJSONObject(JSON_KEY_LANGUAGE).getString("name").equals("en")) {
                 flavorTextList.add(new PokemonFlavorText(flavorTextObject.getJSONObject("version").getString("name"),
-                        flavorTextObject.getJSONObject("language").getString("name"),
+                        flavorTextObject.getJSONObject(JSON_KEY_LANGUAGE).getString("name"),
                         flavorTextObject.getString("flavor_text")
                 ));
             }
@@ -74,7 +75,7 @@ public class PokedexAPI {
         JSONArray genusArray = jsonObject.getJSONArray("genera");
         for (int i = 0; i < genusArray.length(); i++) {
             JSONObject genusObject = genusArray.getJSONObject(i);
-            if(genusObject.getJSONObject("language").getString("name").equals("en")) {
+            if(genusObject.getJSONObject(JSON_KEY_LANGUAGE).getString("name").equals("en")) {
                 return genusObject.getString("genus");
             }
         }

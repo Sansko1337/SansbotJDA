@@ -13,12 +13,11 @@ public class GaussianImageFilter implements ImageFilter {
 
     private static final String RESULT_TYPE = "png";
 
-    public ImageResult doFilter(BufferedImage originalImage) {
-        BufferedImage resultImage = new BufferedImage(originalImage.getWidth(), originalImage.getHeight(), originalImage.getType());
+    public ImageResult doFilter(BufferedImage image) {
         for (int i = 0; i < 10; i++) {
-            originalImage = doBlur(originalImage);
+            image = doBlur(image);
         }
-        return getResult(originalImage);
+        return getResult(image);
     }
 
     public BufferedImage doBlur(BufferedImage originalImage) {

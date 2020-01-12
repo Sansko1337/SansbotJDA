@@ -79,13 +79,13 @@ public class SansbotJDA {
     }
 
     @Provided
-    public JDA jda() {
+    public JDA jda() throws LoginException, InterruptedException {
         try {
-            return new JDABuilder(AccountType.BOT).setToken(botToken).buildBlocking();
+            return new JDABuilder(AccountType.BOT).setToken(botToken).build().awaitReady();
         } catch (InterruptedException | LoginException e) {
             logger.error("Failed to create JDA");
             System.exit(1);
-            return null;
+            throw e;
         }
     }
 

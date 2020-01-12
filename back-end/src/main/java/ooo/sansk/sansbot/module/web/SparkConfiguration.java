@@ -31,7 +31,7 @@ public class SparkConfiguration {
                               SessionFilter sessionFilter,
                               LoginController loginController,
                               TrackScheduleController trackScheduleController) {
-        this.port = Integer.valueOf(port);
+        this.port = Integer.parseInt(port);
         this.sessionFilter = sessionFilter;
         controllerList = new ArrayList<>();
         controllerList.add(loginController);
@@ -50,7 +50,10 @@ public class SparkConfiguration {
 
 
     public void handleException(Exception e, Request request, Response response) {
-        logger.error("Error handling request from '{}'. Caused by ({}: {})", request.session().id(), e.getClass().getSimpleName(), e.getMessage());
+        if(logger.isErrorEnabled()) {
+            logger.error("Error handling request from '{}'. Caused by ({}: {})", request.session().id(), e.getClass().getSimpleName(), e.getMessage());
+        }
+        response.body("Internal Server Error");
         Spark.halt(500);
     }
 
@@ -64,7 +67,7 @@ public class SparkConfiguration {
     private void registerMapping(Controller controller, Method method, String controllerBaseLocation) {
         Mapping mapping = method.getAnnotation(Mapping.class);
         String mappingLocation = controllerBaseLocation + ensureStringHasLeadingSlashStripTrailingSlash(mapping.location());
-        logger.info("Registering mapping for '{}' with method {}", mappingLocation, mapping.type());
+        logger.info("Registering mapping [{}] {}", mapping.type(), mappingLocation);
         mapping.type().registerMapping(mappingLocation, (request, response) ->
                 method.invoke(controller, request, response)
         );

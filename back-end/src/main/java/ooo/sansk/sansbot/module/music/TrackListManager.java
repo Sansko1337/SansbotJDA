@@ -14,10 +14,8 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.VoiceChannel;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import nl.imine.vaccine.annotation.AfterCreate;
 import nl.imine.vaccine.annotation.Component;
-import ooo.sansk.sansbot.module.music.playlist.PlayList;
 import ooo.sansk.sansbot.module.music.playlist.Track;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,8 +25,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.function.Supplier;
 
 @Component
 public class TrackListManager implements AudioEventListener {
@@ -36,18 +32,15 @@ public class TrackListManager implements AudioEventListener {
     private static final Logger logger = LoggerFactory.getLogger(TrackListManager.class);
 
     private final JDA jda;
-    private final PlayListService playListService;
     private final AudioPlayerManager audioPlayerManager;
     private final Queue<AudioTrack> queue;
     private final List<Track> playlistQueue;
     private final PlayMode currentPlayMode;
 
     private AudioPlayer audioPlayer;
-    private PlayList currentPlayList;
 
-    public TrackListManager(JDA jda, PlayListService playListService) {
+    public TrackListManager(JDA jda) {
         this.jda = jda;
-        this.playListService = playListService;
         this.audioPlayerManager = new DefaultAudioPlayerManager();
         this.queue = new LinkedList<>();
         this.playlistQueue = new ArrayList<>();
@@ -106,11 +99,6 @@ public class TrackListManager implements AudioEventListener {
         } else {
             queue.add(audioTrack);
         }
-    }
-
-    private void queuePlaylist(PlayList playList) {
-        playlistQueue.clear();
-        playlistQueue.addAll(playList.getTrackList());
     }
 
     public boolean play(AudioTrack track) {
@@ -186,11 +174,12 @@ public class TrackListManager implements AudioEventListener {
 
             @Override
             public void playlistLoaded(AudioPlaylist playlist) {
+                //No operation
             }
 
             @Override
             public void noMatches() {
-                logger.warn("Could not load track \"{}\" in playlist \"{}\"", track.getSource(), currentPlayList.getId());
+                logger.warn("Could not load track \"{}\"", track.getSource());
                 playNextPlayListTrack();
             }
 

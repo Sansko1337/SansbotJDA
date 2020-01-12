@@ -31,23 +31,24 @@ public class PackageScanner {
      */
     private static void checkDirectory(File directory, String pckgname, ArrayList<Class<?>> classes)
             throws ClassNotFoundException {
-        if (directory.exists() && directory.isDirectory()) {
-            final String[] files = directory.list();
+        if (!directory.exists() || !directory.isDirectory()) {
+            return;
+        }
+        final String[] files = directory.list();
 
-            for (final String file : files) {
-                if (file.endsWith(CLASS_FILE_PREFIX)) {
-                    try {
-                        classes.add(Class.forName(pckgname + '.'
-                                + file.substring(0, file.length() - 6)));
-                    } catch (final NoClassDefFoundError e) {
-                        // do nothing. this class hasn't been found by the
-                        // loader, and we don't care.
-                    }
-                } else {
-                    File tmpDirectory = new File(directory, file);
-                    if (tmpDirectory.isDirectory()) {
-                        checkDirectory(tmpDirectory, pckgname + "." + file, classes);
-                    }
+        for (final String file : files) {
+            if (file.endsWith(CLASS_FILE_PREFIX)) {
+                try {
+                    classes.add(Class.forName(pckgname + '.'
+                            + file.substring(0, file.length() - 6)));
+                } catch (final NoClassDefFoundError e) {
+                    // do nothing. this class hasn't been found by the
+                    // loader, and we don't care.
+                }
+            } else {
+                File tmpDirectory = new File(directory, file);
+                if (tmpDirectory.isDirectory()) {
+                    checkDirectory(tmpDirectory, pckgname + "." + file, classes);
                 }
             }
         }
@@ -56,15 +57,14 @@ public class PackageScanner {
     /**
      * Private helper method.
      *
-     * @param connection the connection to the jar
-     * @param pckgname   the package name to search for
-     * @param classes    the current ArrayList of all classes. This method will simply
-     *                   add new classes.
+     * @param connection  the connection to the jar
+     * @param packageName the package name to search for
+     * @param classes     the current ArrayList of all classes. This method will simply
+     *                    add new classes.
      * @throws ClassNotFoundException if a file isn't loaded but still is in the jar file
      * @throws IOException            if it can't correctly read from the jar file.
      */
-    private static void checkJarFile(JarURLConnection connection,
-                                     String pckgname, ArrayList<Class<?>> classes)
+    private static void checkJarFile(JarURLConnection connection, String packageName, ArrayList<Class<?>> classes)
             throws ClassNotFoundException, IOException {
         final JarFile jarFile = connection.getJarFile();
         final Enumeration<JarEntry> entries = jarFile.entries();
@@ -76,7 +76,7 @@ public class PackageScanner {
             if (name.contains(CLASS_FILE_PREFIX)) {
                 name = name.substring(0, name.length() - 6).replace('/', '.');
 
-                if (name.contains(pckgname)) {
+                if (name.contains(packageName)) {
                     classes.add(Class.forName(name));
                 }
             }
@@ -97,32 +97,26 @@ public class PackageScanner {
         try {
             final ClassLoader cld = Thread.currentThread().getContextClassLoader();
 
-            if (cld == null)
+            if (cld == null) {
                 throw new ClassNotFoundException("Can't get class loader.");
+            }
 
             final Enumeration<URL> resources = cld.getResources(pckgname.replace('.', '/'));
             URLConnection connection;
 
-            for (URL url = null; resources.hasMoreElements()
-                    && ((url = resources.nextElement()) != null); ) {
-                try {
-                    connection = url.openConnection();
+            for (URL url = null; resources.hasMoreElements() && ((url = resources.nextElement()) != null); ) {
+                connection = url.openConnection();
 
-                    if (connection instanceof JarURLConnection) {
-                        checkJarFile((JarURLConnection) connection, pckgname, classes);
-                    } else {
-                        try {
-                            checkDirectory(new File(URLDecoder.decode(url.getPath(), "UTF-8")), pckgname, classes);
-                        } catch (final UnsupportedEncodingException ex) {
-                            throw new ClassNotFoundException(pckgname + " does not appear to be a valid package (Unsupported encoding)", ex);
-                        }
+                if (connection instanceof JarURLConnection) {
+                    checkJarFile((JarURLConnection) connection, pckgname, classes);
+                } else {
+                    try {
+                        checkDirectory(new File(URLDecoder.decode(url.getPath(), "UTF-8")), pckgname, classes);
+                    } catch (final UnsupportedEncodingException ex) {
+                        throw new ClassNotFoundException(pckgname + " does not appear to be a valid package (Unsupported encoding)", ex);
                     }
-                } catch (final IOException ioex) {
-                    throw new ClassNotFoundException("IOException was thrown when trying to get all resources for " + pckgname, ioex);
                 }
             }
-        } catch (final NullPointerException ex) {
-            throw new ClassNotFoundException(pckgname + " does not appear to be a valid package (Null pointer exception)", ex);
         } catch (final IOException ioex) {
             throw new ClassNotFoundException("IOException was thrown when trying to get all resources for " + pckgname, ioex);
         }

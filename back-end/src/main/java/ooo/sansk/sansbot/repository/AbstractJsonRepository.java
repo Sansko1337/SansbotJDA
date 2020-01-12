@@ -62,8 +62,7 @@ public abstract class AbstractJsonRepository<I, T extends Identifyable<I>> imple
             Class objectClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
             return createObjectMapper().readValue(inputStream, objectMapper.getTypeFactory().constructMapType(HashMap.class, idClass, objectClass));
         } catch (IOException e) {
-            logger.error("Exception while while reading Json from {}. List will not be initialized to prevent overwriting storage to an empty file ({}: {})", storagePath.toAbsolutePath(), e.getClass().getSimpleName(), e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception while while reading Json from {}. List will not be initialized to prevent overwriting storage to an empty file", storagePath.toAbsolutePath(), e);
             return Collections.emptyMap();
         }
     }
@@ -104,8 +103,7 @@ public abstract class AbstractJsonRepository<I, T extends Identifyable<I>> imple
                 }
             }
         } catch (IOException ioe) {
-            logger.error("An exception occurred while creating config files ({}: {})", ioe.getClass().getSimpleName(), ioe.getLocalizedMessage());
-            ioe.printStackTrace();
+            logger.error("An exception occurred while creating config files", ioe);
         }
     }
 }

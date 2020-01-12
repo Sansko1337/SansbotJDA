@@ -27,6 +27,4 @@ public abstract class AbstractMusicChatCommand extends ChatCommand {
             return false;
         }
     }
-
-    //TODO Add private conversation check
 }
