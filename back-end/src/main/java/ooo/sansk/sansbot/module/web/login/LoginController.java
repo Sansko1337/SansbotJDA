@@ -11,8 +11,6 @@ import spark.Response;
 
 import java.util.Optional;
 
-import static spark.Spark.halt;
-
 @Component
 @Mapping(location = LoginController.BASE_URL)
 public class LoginController implements Controller {

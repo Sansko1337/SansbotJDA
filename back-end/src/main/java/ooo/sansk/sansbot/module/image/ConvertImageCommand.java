@@ -1,8 +1,8 @@
 package ooo.sansk.sansbot.module.image;
 
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.requests.restaction.MessageAction;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import nl.imine.vaccine.annotation.Component;
 import ooo.sansk.sansbot.command.ChatCommand;
 import ooo.sansk.sansbot.command.ChatCommandHandler;
@@ -12,6 +12,7 @@ import ooo.sansk.sansbot.module.image.filter.ImageFilter;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -43,7 +44,7 @@ public class ConvertImageCommand extends ChatCommand {
         }
 
         Optional<ImageFilter> oFilter = FilterType.getFilter(args[1]).map(FilterType::getFilter);
-        if (!oFilter.isPresent()) {
+        if (oFilter.isEmpty()) {
             reply(messageReceivedEvent.getChannel(), "Ik kan een hoop, maar dat nou net weer niet. %s");
             return;
         }
@@ -79,7 +80,7 @@ public class ConvertImageCommand extends ChatCommand {
 
     private BufferedImage downloadImageFromAttachment(Message.Attachment attachment) {
         try {
-            return ImageIO.read(attachment.getInputStream());
+            return ImageIO.read(new URL(attachment.getUrl()).openStream());
         } catch (IOException e) {
             return null;
         }

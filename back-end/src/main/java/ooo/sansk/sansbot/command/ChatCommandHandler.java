@@ -1,10 +1,10 @@
 package ooo.sansk.sansbot.command;
 
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.events.Event;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.hooks.EventListener;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.events.GenericEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.hooks.EventListener;
 import nl.imine.vaccine.annotation.AfterCreate;
 import nl.imine.vaccine.annotation.Component;
 import nl.imine.vaccine.annotation.Property;
@@ -51,7 +51,7 @@ public class ChatCommandHandler implements EventListener {
     }
 
     @Override
-    public void onEvent(Event event) {
+    public void onEvent(GenericEvent event) {
         if (event instanceof MessageReceivedEvent) {
             MessageReceivedEvent messageReceivedEvent = (MessageReceivedEvent) event;
             String contentRaw = messageReceivedEvent.getMessage().getContentRaw();

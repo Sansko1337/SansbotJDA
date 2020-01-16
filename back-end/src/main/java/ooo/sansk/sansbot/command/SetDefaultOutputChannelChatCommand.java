@@ -1,7 +1,7 @@
 package ooo.sansk.sansbot.command;
 
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import nl.imine.vaccine.annotation.Component;
 
 import java.util.Arrays;

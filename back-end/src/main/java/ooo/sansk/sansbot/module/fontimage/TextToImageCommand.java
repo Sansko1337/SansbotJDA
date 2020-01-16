@@ -1,7 +1,7 @@
 package ooo.sansk.sansbot.module.fontimage;
 
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.requests.restaction.MessageAction;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import nl.imine.vaccine.annotation.Component;
 import ooo.sansk.sansbot.command.ChatCommand;
 import ooo.sansk.sansbot.command.ChatCommandHandler;
@@ -49,7 +49,7 @@ public class TextToImageCommand extends ChatCommand {
             try {
                 ImageIO.write(textToImageConversionResult.getOutput(), "png", baos);
                 MessageAction messageAction = messageReceivedEvent.getChannel().sendFile(baos.toByteArray(), "tti.png");
-                if (messageReceivedEvent.getChannel().getType().isGuild()) {
+                if (messageReceivedEvent.getChannel().getType().isGuild() && messageReceivedEvent.getMember() != null) {
                     messageAction = messageAction.content(messageReceivedEvent.getMember().getAsMention());
                 }
                 messageAction.submit();

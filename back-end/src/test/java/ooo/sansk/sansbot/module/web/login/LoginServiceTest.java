@@ -1,7 +1,7 @@
 package ooo.sansk.sansbot.module.web.login;
 
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.User;
 import ooo.sansk.sansbot.module.web.session.SessionFilter;
 import ooo.sansk.sansbot.module.web.session.SessionInformation;
 import ooo.sansk.sansbot.util.ChangeableFixedClock;

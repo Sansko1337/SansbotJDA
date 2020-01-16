@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import net.dv8tion.jda.core.AccountType;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.JDABuilder;
+import net.dv8tion.jda.api.AccountType;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
 import nl.imine.vaccine.Vaccine;
 import nl.imine.vaccine.annotation.AfterCreate;
 import nl.imine.vaccine.annotation.Component;
@@ -81,7 +81,7 @@ public class SansbotJDA {
     @Provided
     public JDA jda() {
         try {
-            return new JDABuilder(AccountType.BOT).setToken(botToken).buildBlocking();
+            return new JDABuilder(AccountType.BOT).setToken(botToken).build().awaitReady();
         } catch (InterruptedException | LoginException e) {
             logger.error("Failed to create JDA");
             System.exit(1);

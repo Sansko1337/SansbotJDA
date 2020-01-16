@@ -4,7 +4,6 @@ import ooo.sansk.sansbot.module.image.ImageResult;
 import ooo.sansk.sansbot.module.image.ImageResultReason;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -35,10 +34,7 @@ public class InvertColorImageFilter implements ImageFilter {
     }
 
     private int reverseColorInt(int rgb) {
-        Color oldColor = new Color(rgb, true);
-        int newRed = 255 - oldColor.getRed();
-        int newGreen = 255 - oldColor.getGreen();
-        int newBlue = 255 - oldColor.getBlue();
-        return new Color(newRed, newGreen, newBlue, oldColor.getAlpha()).getRGB();
+        //Invert only lower 3 bytes to preserve alpha channel
+        return rgb ^ 0xff_ff_ff;
     }
 }
