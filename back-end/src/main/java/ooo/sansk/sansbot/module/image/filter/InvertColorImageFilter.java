@@ -37,8 +37,8 @@ public class InvertColorImageFilter implements ImageFilter {
     private int reverseColorInt(int rgb) {
         Color oldColor = new Color(rgb, true);
         int newRed = 255 - oldColor.getRed();
-        int newBlue = 255 - oldColor.getBlue();
         int newGreen = 255 - oldColor.getGreen();
-        return new Color(newRed, newBlue, newGreen, oldColor.getAlpha()).getRGB();
+        int newBlue = 255 - oldColor.getBlue();
+        return new Color(newRed, newGreen, newBlue, oldColor.getAlpha()).getRGB();
     }
 }
