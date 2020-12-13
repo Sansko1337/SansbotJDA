@@ -1,5 +1,7 @@
 package ooo.sansk.sansbot;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -7,6 +9,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import nl.imine.vaccine.Vaccine;
 import nl.imine.vaccine.annotation.AfterCreate;
 import nl.imine.vaccine.annotation.Component;
@@ -81,9 +84,9 @@ public class SansbotJDA {
     @Provided
     public JDA jda() {
         try {
-            return new JDABuilder(AccountType.BOT).setToken(botToken).build().awaitReady();
+            return JDABuilder.create(botToken, GatewayIntent.getIntents(GatewayIntent.ALL_INTENTS)).build().awaitReady();
         } catch (InterruptedException | LoginException e) {
-            logger.error("Failed to create JDA");
+            logger.error("Failed to create JDA", e);
             System.exit(1);
             return null;
         }
@@ -119,6 +122,8 @@ public class SansbotJDA {
     public ObjectMapper objectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        objectMapper.enable(JsonParser.Feature.ALLOW_SINGLE_QUOTES);
         SimpleModule serializers = new SimpleModule();
         serializers.addSerializer(AudioTrack.class, new AudioTrackSerializer());
         objectMapper.registerModule(serializers);

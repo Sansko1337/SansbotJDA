@@ -9,7 +9,8 @@ public enum FilterType {
 
     INVERT(new InvertColorImageFilter(), Arrays.asList("inverted", "invert", "i")),
     BW(new BlackWhiteColorImageFilter(), Arrays.asList("blackwhite", "bw")),
-    GAUSSIAN_BLUR(new GaussianImageFilter(), Arrays.asList("blur", "gauss"));
+    GAUSSIAN_BLUR(new GaussianImageFilter(), Arrays.asList("blur", "gauss")),
+    DEEP_FRY(new DeepFryImageFilter(), Arrays.asList("df", "fry"));
 
     private final ImageFilter filter;
     private final List<String> aliases;

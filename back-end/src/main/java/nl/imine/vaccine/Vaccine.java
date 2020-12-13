@@ -4,7 +4,11 @@ import nl.imine.vaccine.annotation.AfterCreate;
 import nl.imine.vaccine.annotation.Component;
 import nl.imine.vaccine.annotation.Property;
 import nl.imine.vaccine.annotation.Provided;
-import nl.imine.vaccine.exception.*;
+import nl.imine.vaccine.exception.CircularDependencyException;
+import nl.imine.vaccine.exception.ConstructorStalemateException;
+import nl.imine.vaccine.exception.DependencyInstantiationException;
+import nl.imine.vaccine.exception.PackageLoadFailedException;
+import nl.imine.vaccine.exception.UnknownDependencyException;
 import nl.imine.vaccine.model.ComponentDependency;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +17,11 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 public class Vaccine {
@@ -57,8 +65,8 @@ public class Vaccine {
 
     private List<ComponentDependency> scanClassesForCandidates(List<Class> classes) {
         return classes.stream()
-                .map(this::getInjectionDetails)
-                .collect(Collectors.toList());
+            .map(this::getInjectionDetails)
+            .collect(Collectors.toList());
     }
 
     private ComponentDependency getInjectionDetails(Class clazz) {
@@ -77,10 +85,10 @@ public class Vaccine {
 
     private Class[] getProvidedComponentsFromClass(Class clazz) {
         return Arrays.stream(clazz.getMethods())
-                .filter(method -> method.getParameterCount() == 0)
-                .filter(method -> method.isAnnotationPresent(Provided.class))
-                .map(Method::getReturnType)
-                .toArray(Class[]::new);
+            .filter(method -> method.getParameterCount() == 0)
+            .filter(method -> method.isAnnotationPresent(Provided.class))
+            .map(Method::getReturnType)
+            .toArray(Class[]::new);
     }
 
     private void resolveDependency(ComponentDependency dependency) {
@@ -89,14 +97,14 @@ public class Vaccine {
 
     private Object createOrGetCandidateInstance(Class candidate, List<Class> parents) {
         return candidates.stream()
-                .filter(createdInstance -> candidate.equals(createdInstance.getClass()))
-                .findFirst()
-                .orElseGet(() -> {
-                    Object instance = createInstanceFromCandidate(candidate, parents);
-                    candidates.add(instance);
-                    runAfterCreation(instance);
-                    return instance;
-                });
+            .filter(createdInstance -> candidate.equals(createdInstance.getClass()))
+            .findFirst()
+            .orElseGet(() -> {
+                Object instance = createInstanceFromCandidate(candidate, parents);
+                candidates.add(instance);
+                runAfterCreation(instance);
+                return instance;
+            });
     }
 
     private Object createInstanceFromCandidate(Class candidate, List<Class> parents) {
@@ -151,26 +159,27 @@ public class Vaccine {
 
     private Object searchAndCreateProviderInstance(Object providerInstance, Class requestedType) {
         return candidates.stream()
-                .filter(requestedType::isInstance)
+            .filter(requestedType::isInstance)
+            .findFirst()
+            .orElseGet(() -> Arrays.stream(providerInstance.getClass().getMethods())
+                .filter(method -> method.getParameterCount() == 0)
+                .filter(method -> method.isAnnotationPresent(Provided.class))
+                .filter(method -> method.getReturnType().equals(requestedType))
+                .map(method -> {
+                    try {
+                        Object providedObject = method.invoke(providerInstance);
+                        candidates.add(providedObject);
+                        return providedObject;
+                    } catch (IllegalAccessException | InvocationTargetException e) {
+                        logger.error("Could not provide Instance for {}. Reason: ({}: {})",
+                            requestedType.getClass().getName(),
+                            e.getClass().getSimpleName(),
+                            e.getMessage());
+                    }
+                    return null;
+                })
                 .findFirst()
-                .orElseGet(() -> Arrays.stream(providerInstance.getClass().getMethods())
-                        .filter(method -> method.getParameterCount() == 0)
-                        .filter(method -> method.isAnnotationPresent(Provided.class))
-                        .filter(method -> method.getReturnType().equals(requestedType))
-                        .map(method -> {
-                            try {
-                                Object providedObject = method.invoke(providerInstance);
-                                candidates.add(providedObject);
-                                return providedObject;
-                            } catch (IllegalAccessException | InvocationTargetException e) {
-                                logger.error("Could not provide Instance for {}. Reason: ({}: {})",
-                                        requestedType.getClass().getName(),
-                                        e.getClass().getSimpleName(),
-                                        e.getMessage());
-                            }
-                            return null;
-                        })
-                        .findFirst().orElse(null));
+                .orElse(null));
     }
 
     private String resolvePropertyDependency(Parameter parameter) {
@@ -179,29 +188,29 @@ public class Vaccine {
 
     private void runAfterCreation(Object injectable) {
         Arrays.stream(injectable.getClass().getMethods())
-                .filter(method -> method.isAnnotationPresent(AfterCreate.class))
-                .filter(method -> method.getParameterCount() == 0)
-                .forEach(method -> {
-                    try {
-                        method.invoke(injectable);
-                    } catch (IllegalAccessException | InvocationTargetException e) {
-                        logger.error("Could not run @PostConstruct for {}. {}", injectable.getClass().getName(), e);
-                    }
-                });
+            .filter(method -> method.isAnnotationPresent(AfterCreate.class))
+            .filter(method -> method.getParameterCount() == 0)
+            .forEach(method -> {
+                try {
+                    method.invoke(injectable);
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    logger.error("Could not run @PostConstruct for {}. {}", injectable.getClass().getName(), e);
+                }
+            });
     }
 
     private Optional<Class> getProvider(Class type) {
         return dependencies.stream()
-                .filter(dependency -> Arrays.stream(dependency.getProvidedClasses()).anyMatch(type::equals))
-                .map(ComponentDependency::getType)
-                .findAny();
+            .filter(dependency -> Arrays.stream(dependency.getProvidedClasses()).anyMatch(type::equals))
+            .map(ComponentDependency::getType)
+            .findAny();
     }
 
 
     public Optional<Object> getInjected(Class type) {
         return candidates.stream()
-                .filter(candidate -> candidate.getClass().equals(type))
-                .findAny();
+            .filter(candidate -> candidate.getClass().equals(type))
+            .findAny();
     }
 
     public List<Object> getCandidates() {
